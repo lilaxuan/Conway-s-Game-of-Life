@@ -1,5 +1,5 @@
 import BoxComponent from './BoxComponent'
-import './GridLayoutStyle.css'
+import './GridLayout.css'
 
 export default function GridLayout() {
 

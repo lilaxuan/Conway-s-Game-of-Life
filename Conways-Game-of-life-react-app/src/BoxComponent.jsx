@@ -1,4 +1,4 @@
-import './BoxComponentStyle.css'
+import './BoxComponent.css'
 
 export default function BoxComponent() {
 

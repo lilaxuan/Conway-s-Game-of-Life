@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import GridLayout from './GridLayout'
+import Home from './Home'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GridLayout />
+    <Home />
   </React.StrictMode>,
 )
