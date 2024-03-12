@@ -1,10 +1,10 @@
 # Conway-s-Game-of-Life
 
-1. Initilize the React App:
+1. Initialize the React App:
 
 `npm create vite@latest`
 
-then choose the app name; and package name
+Select react, and javascript; then choose the app name; and package name
 
 2. install the dependencies 
 
