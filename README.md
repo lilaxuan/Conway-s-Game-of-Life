@@ -15,3 +15,6 @@ Select react, and javascript; then choose the app name; and package name
 cd into the package directory
 
 `npm run dev`
+
+4. Add React Reouter to help to route accross different pages
+`npm install react-router-dom`   (this will automatically add the dependency in the package.json)
