@@ -15,7 +15,6 @@ export default function Home() {
 
             {/* Route Definitions */}
             <Routes>
-                <Route path="/" element={<Home />} />
                 <Route path="/grid" element={<GridLayout />} />
                 <Route path="/jiaxuanli" element={<Personal />} />
             </Routes>
