@@ -1,0 +1,22 @@
+.game-introduction {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 20px;
+    margin-top: 12vh;
+    line-height: 1.6;
+}
+
+h2 {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+ul {
+    margin-bottom: 10px;
+    padding-left: 20px;
+}
+
+
+li {
+    margin-bottom: 5px;
+}
