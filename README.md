@@ -11,5 +11,7 @@ then choose the app name; and package name
 `npm install`
 
 3. run the app on localhost
+
 cd into the package directory
+
 `npm run dev`
