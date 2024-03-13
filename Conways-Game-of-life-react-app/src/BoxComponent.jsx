@@ -2,8 +2,9 @@ import './BoxComponent.css'
 import { useState, useEffect } from 'react'
 
 
-export default function BoxComponent() {
-    const [boxLiving, setBoxLiving] = useState(false);
+export default function BoxComponent(props) {
+    // console.log("helohihi : ", props.isAlive);
+    const [boxLiving, setBoxLiving] = useState(props.isAlive);
     const [boxColorClass, setBoxColorClass] = useState('deadWhiteColor');
 
     function swithBoxState() {
@@ -26,9 +27,7 @@ export default function BoxComponent() {
 
     return (
         <div>
-            {/* <p>{props.isAlive}</p> */}
             <button className={`box ${boxColorClass}`} onClick={swithBoxState}></button>
-            {/* <div>{props.isAlive}</div> */}
         </div>
 
     )
