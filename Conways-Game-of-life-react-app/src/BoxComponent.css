@@ -4,3 +4,20 @@
     border: 1px solid gray;
     transition: background-color 0.3s;
 }
+
+.livingBlackColor {
+    background-color: #333;
+}
+
+.deadWhiteColor {
+    background-color: white;
+}
+
+button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+}
