@@ -3,22 +3,38 @@ html {
     height: 100%;
     display: flex;
     width: 100%;
-    /* margin-top: 80px; */
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
+.content {
+    flex-grow: 1;
+    /* Takes up remaining space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    /* Enables vertical scrolling */
+    padding-top: 11vh;
+    /* Adjust based on the navbar's height */
+    margin-top: 11vh;
+}
+
+.grid-background {
+    background-color: #e0e0e0;
+    justify-content: center;
+    align-items: center;
+}
 
 .grid-container {
     display: grid;
-    /* grid-template-columns: repeat(4, 5fr); */
     grid-template-rows: repeat(var(--rows), 1fr);
     grid-template-columns: repeat(var(--cols), 1fr);
-    /* width: 100%;
-    max-width: 400px;
-    justify-content: center;
-    align-items: center; */
+    max-height: 800px;
+    max-width: 800px;
+    overflow-y: auto;
+    /* Makes grid scrollable if it exceeds max-height */
 }
 
 .form-container {
@@ -26,8 +42,6 @@ html {
     display: flex;
     align-items: center;
     justify-content: start;
-    margin: 5px auto;
-    padding: 5px;
     background-color: #f9f9f9;
     border: 1px solid #e0e0e0;
     border-radius: 8px;

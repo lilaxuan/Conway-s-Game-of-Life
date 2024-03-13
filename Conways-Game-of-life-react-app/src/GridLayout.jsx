@@ -3,14 +3,12 @@ import BoxComponent from './BoxComponent';
 import './GridLayout.css';
 
 export default function GridLayout() {
-    const [rows, setRows] = useState(4);
-    const [cols, setCols] = useState(5);
-    const [inputRows, setInputRows] = useState(4); // save the input values
-    const [inputCols, setInputCols] = useState(5);
+    const [rows, setRows] = useState(20);
+    const [cols, setCols] = useState(20);
+    const [inputRows, setInputRows] = useState(20); // save the input values
+    const [inputCols, setInputCols] = useState(20);
     const [error, setError] = useState('');
     const gridContainerRef = useRef(null); // Ref for accessing the grid container
-    // const initialBoxComponents = buildGrid(4, 5);
-    // const [boxComponents, setBoxComponents] = useState(initialBoxComponents);
 
     function buildGrid() {
         const boxComponents = [];
@@ -35,27 +33,17 @@ export default function GridLayout() {
 
     // useEffect better not nested in another function 
     useEffect(() => {
-        // Update the grid container's CSS variables when n or m changes
+        // Update the grid container's CSS variables when rows or cols changes
         if (gridContainerRef.current) {
             gridContainerRef.current.style.setProperty('--rows', rows);
             gridContainerRef.current.style.setProperty('--cols', cols);
         }
-    }, [rows, cols]); // Depend on n and m so the effect runs when they change
-
-    // function updateGridDimension(rows, cols) {
-    //     useEffect(() => {
-    //         // Update the grid container's CSS variables when n or m changes
-    //         if (gridContainerRef.current) {
-    //             gridContainerRef.current.style.setProperty('--rows', rows);
-    //             gridContainerRef.current.style.setProperty('--cols', cols);
-    //         }
-    //     }, [rows, cols]); // Depend on n and m so the effect runs when they change
-    // }
+    }, [rows, cols]);
 
     const boxComponents = buildGrid();
 
     return (
-        <div>
+        <div className='content'>
             <div className='form-container my-4'>
                 <p>Reset the grid width and height</p>
                 <input
@@ -74,8 +62,10 @@ export default function GridLayout() {
                 <button onClick={resetGrid} className="btn btn-primary">Submit</button>
                 {error && <div className="alert alert-danger mt-3">{error}</div>}
             </div>
-            <div className="grid-container" ref={gridContainerRef}>
-                {boxComponents}
+            <div className='grid-background'>
+                <div className="grid-container" ref={gridContainerRef}>
+                    {boxComponents}
+                </div>
             </div>
         </div>
     )
