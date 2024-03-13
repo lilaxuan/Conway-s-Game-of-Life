@@ -26,7 +26,10 @@ export default function BoxComponent() {
 
     return (
         <div>
+            {/* <p>{props.isAlive}</p> */}
             <button className={`box ${boxColorClass}`} onClick={swithBoxState}></button>
+            {/* <div>{props.isAlive}</div> */}
         </div>
+
     )
 }
