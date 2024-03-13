@@ -16,7 +16,6 @@
 
 a,
 .link-no-decoration {
-    /* Added .link-no-decoration class as an example */
     text-decoration: none !important;
     color: white;
 }
