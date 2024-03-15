@@ -36,8 +36,7 @@ export default function GridLayout() {
 
 
     useEffect(() => {
-        // Count living cells whenever the grid changes
-        const count = countLivingCells(grid); // Use one of the countLivingCells function implementations above
+        const count = countLivingCells(grid);
         setCount(count);
     }, [grid, rows, cols]);
 
@@ -87,8 +86,8 @@ export default function GridLayout() {
     }, [rows, cols]);
 
 
-    function buildGrid(grid) {
-        let boxComponents = [];
+    function buildGrid(grid, rows, cols) {
+        let newBoxComponents = [];
         for (let i = 0; i < rows; i++) {
             let row = [];
             for (let j = 0; j < cols; j++) {
@@ -96,12 +95,11 @@ export default function GridLayout() {
                     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} x={i} y={j} />);
                 } else {
                     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} x={i} y={j} />);
-
                 }
             }
-            boxComponents.push(row);
+            newBoxComponents.push(row);
         }
-        return boxComponents;
+        return newBoxComponents;
     };
 
 
@@ -113,101 +111,91 @@ export default function GridLayout() {
         setCols(INITIAL_COLS);
     }
 
-    // updates the boxComponents grid based on the rules
-    function runSimulation(boxComponents, chosenIndices) {
-        console.log('hihihi-run simulation456!!!');
-        console.log('run-simulation-boxComponents: ', boxComponents);
-        // 基于当前chosenIndices计算下一步的chosenIndices
-        const newChosenIndices = chosenIndices; // 举例，实际上你需要根据游戏规则来计算
-        for (let i = 0; i < boxComponents.length; i++) {
-            for (let j = 0; j < boxComponents[i].length; j++) {
-                let numOfLivingNeighbors = countLivingAndDeadNeighbors(boxComponents, i, j)
-                console.log('num of living neighbors for current pos i-j-numoflivingneighbor', i, j, numOfLivingNeighbors);
-                //1. A dead cell with exactly three live neighbours becomes a live cell,
-                if (boxComponents[i][j].isAlive === false) {
-                    if (numOfLivingNeighbors === 3) {
-                        // Components的state和props没办法改变，除非通过useState
-                        // boxComponents[i][j].isAlive = ture;
-                        // <BoxComponent
-                        //     key={`${i}-${j}`}
-                        //     isAlive={true}
-                        // />
-                        newChosenIndices.add([i, j]);
-                    }
-                }
-                else {
-                    // 2. A living cell with less than two living neighbours dies.
-                    if (numOfLivingNeighbors < 2) {
-                        // boxComponents[i][j].isAlive = false;
-                        // newChosenIndices.delete([i, j]);
-                        deleteArrayFromSet(newChosenIndices, [i, j]);
+    // function runSimulation(grid) {
+    //     for (let i = 0; i < rows; i++) {
+    //         for (let j = 0; j < cols; j++) {
+    //             let numOfLivingNeighbors = countLivingNeighbors(grid, i, j);
+    //             if (grid[i][j] === false) {
+    //                 if (numOfLivingNeighbors > 3) {
+    //                     grid[i][j] = true;
+    //                 }
+    //             } else {
+    //                 if (numOfLivingNeighbors < 2 || numOfLivingNeighbors > 3) {
+    //                     grid[i][j] = false;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     setGrid(grid);
+    // }
 
-                    } else if (numOfLivingNeighbors === 2 || numOfLivingNeighbors === 3) {
-                        // 3. A living cell with two or three live neighbours lives
-                        // continue;
-                        newChosenIndices.add([i, j]);
-                    } else if (numOfLivingNeighbors > 3) {
-                        // 4. A living cell with more than three live neighbours dies.
-                        // boxComponents[i][j].isAlive = false;
-                        // newChosenIndices.delete([i, j]);
-                        deleteArrayFromSet(newChosenIndices, [i, j]);
-                    }
-                }
-
-            }
-        }
+    function runSimulation() {
+        const newGrid = grid.map((row, i) =>
+            row.map((cell, j) => {
+                const alive = countLivingNeighbors(grid, i, j);
+                if (cell && (alive < 2 || alive > 3)) return false;
+                if (!cell && alive === 3) return true;
+                return cell;
+            })
+        );
+        setGrid(newGrid);
     }
 
+
     // check the number of living neighbors cells and dead neighbor cells of a cell (i, j)
-    function countLivingAndDeadNeighbors(boxComponents, i, j) {
-        let numOfLivingNeighbors = 0; // 3 living neighbors 
+    function countLivingNeighbors(grid, i, j) {
+        let numOfLivingNeighbors = 0;
+        if (grid.length === 0) {
+            return 0;
+        }
+        if (i < 0 || j < 0 || i > grid.length - 1 || j > grid[0].length - 1) {
+            return 0;
+        }
         // up
         if (i - 1 >= 0) {
-            if (boxComponents[i - 1][j].isAlive === true) {
+            if (grid[i - 1][j] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
-
         // down
-        if (i + 1 < boxComponents.length) {
-            if (boxComponents[i + 1][j].isAlive === true) {
+        if (i + 1 < grid.length) {
+            if (grid[i + 1][j] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
-
         // left
         if (j - 1 >= 0) {
-            if (boxComponents[i][j - 1].isAlive === true) {
+            if (grid[i][j - 1].isAlive === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // right
-        if (j + 1 < boxComponents[i].length) {
-            if (boxComponents[i][j + 1].isAlive === true) {
+        if (j + 1 < grid[i].length) {
+            if (grid[i][j + 1] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // left, up
         if (i - 1 >= 0 && j - 1 >= 0) {
-            if (boxComponents[i - 1][j - 1].isAlive === true) {
+            if (grid[i - 1][j - 1] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // left, down
-        if (i + 1 < boxComponents.length && j - 1 >= 0) {
-            if (boxComponents[i + 1][j - 1].isAlive === true) {
+        if (i + 1 < grid.length && j - 1 >= 0) {
+            if (grid[i + 1][j - 1] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // right, up
-        if (i - 1 >= 0 && j + 1 < boxComponents[i].length) {
-            if (boxComponents[i - 1][j + 1].isAlive === true) {
+        if (i - 1 >= 0 && j + 1 < grid[i].length) {
+            if (grid[i - 1][j + 1] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // right, down
-        if (i + 1 < boxComponents.length && j + 1 < boxComponents[i].length) {
-            if (boxComponents[i + 1][j + 1].isAlive === true) {
+        if (i + 1 < grid.length && j + 1 < grid[i].length) {
+            if (grid[i + 1][j + 1] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
@@ -215,14 +203,13 @@ export default function GridLayout() {
     }
 
     // const boxComponents = buildGrid(chosenIndices, rows, cols);
-    const boxComponents = buildGrid(grid);
+    const boxComponents = buildGrid(grid, rows, cols);
+
 
 
     return (
         <CountContext.Provider value={{ count, setCount }}>
-            {/* <CountContext.Provider value={{ good_count, setGoodCount }}> */}
             <div className='content'>
-                {/* <div className='part'> */}
                 <div className='form-container my-4'>
                     <p>Reset the grid width and height</p>
                     <input
@@ -247,25 +234,16 @@ export default function GridLayout() {
                         {boxComponents}
                     </div>
                 </div>
-                {/* <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 20px)` }}>
-                    {grid.map((row, rowIndex) =>
-                        row.map((isAlive, colIndex) => (
-                            <BoxComponent
-                                key={`${rowIndex}-${colIndex}`}
-                                isAlive={isAlive}
-                                toggleCellState={() => toggleCellState(rowIndex, colIndex)}
-                            />
-                        ))
-                    )}
-                </div> */}
                 <div className='form-container form-control-bottom'>
                     <button onClick={resetGrid} className="btn btn-primary">Reset</button>
-                    <button onClick={resetGrid} className="btn btn-primary">Run Simulation</button>
+                    <button onClick={() => runSimulation()} className="btn btn-primary">Run Simulation</button>
                 </div>
             </div>
         </CountContext.Provider>
     )
 }
+
+
 
 
 
@@ -351,4 +329,105 @@ export default function GridLayout() {
 //         }
 //     }
 //     return false; // Return false if the array was not found
+// }
+
+// updates the boxComponents grid based on the rules
+// function runSimulation(boxComponents, chosenIndices) {
+//     console.log('hihihi-run simulation456!!!');
+//     console.log('run-simulation-boxComponents: ', boxComponents);
+//     // 基于当前chosenIndices计算下一步的chosenIndices
+//     const newChosenIndices = chosenIndices; // 举例，实际上你需要根据游戏规则来计算
+//     for (let i = 0; i < boxComponents.length; i++) {
+//         for (let j = 0; j < boxComponents[i].length; j++) {
+//             let numOfLivingNeighbors = countLivingAndDeadNeighbors(boxComponents, i, j)
+//             console.log('num of living neighbors for current pos i-j-numoflivingneighbor', i, j, numOfLivingNeighbors);
+//             //1. A dead cell with exactly three live neighbours becomes a live cell,
+//             if (boxComponents[i][j].isAlive === false) {
+//                 if (numOfLivingNeighbors === 3) {
+//                     // Components的state和props没办法改变，除非通过useState
+//                     // boxComponents[i][j].isAlive = ture;
+//                     // <BoxComponent
+//                     //     key={`${i}-${j}`}
+//                     //     isAlive={true}
+//                     // />
+//                     newChosenIndices.add([i, j]);
+//                 }
+//             }
+//             else {
+//                 // 2. A living cell with less than two living neighbours dies.
+//                 if (numOfLivingNeighbors < 2) {
+//                     // boxComponents[i][j].isAlive = false;
+//                     // newChosenIndices.delete([i, j]);
+//                     deleteArrayFromSet(newChosenIndices, [i, j]);
+
+//                 } else if (numOfLivingNeighbors === 2 || numOfLivingNeighbors === 3) {
+//                     // 3. A living cell with two or three live neighbours lives
+//                     // continue;
+//                     newChosenIndices.add([i, j]);
+//                 } else if (numOfLivingNeighbors > 3) {
+//                     // 4. A living cell with more than three live neighbours dies.
+//                     // boxComponents[i][j].isAlive = false;
+//                     // newChosenIndices.delete([i, j]);
+//                     deleteArrayFromSet(newChosenIndices, [i, j]);
+//                 }
+//             }
+
+//         }
+//     }
+// }
+
+
+// function countLivingNeighbors(boxComponents, i, j) {
+//     let numOfLivingNeighbors = 0; // 3 living neighbors 
+//     // up
+//     if (i - 1 >= 0) {
+//         if (boxComponents[i - 1][j].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+
+//     // down
+//     if (i + 1 < boxComponents.length) {
+//         if (boxComponents[i + 1][j].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+
+//     // left
+//     if (j - 1 >= 0) {
+//         if (boxComponents[i][j - 1].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+//     // right
+//     if (j + 1 < boxComponents[i].length) {
+//         if (boxComponents[i][j + 1].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+//     // left, up
+//     if (i - 1 >= 0 && j - 1 >= 0) {
+//         if (boxComponents[i - 1][j - 1].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+//     // left, down
+//     if (i + 1 < boxComponents.length && j - 1 >= 0) {
+//         if (boxComponents[i + 1][j - 1].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+//     // right, up
+//     if (i - 1 >= 0 && j + 1 < boxComponents[i].length) {
+//         if (boxComponents[i - 1][j + 1].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+//     // right, down
+//     if (i + 1 < boxComponents.length && j + 1 < boxComponents[i].length) {
+//         if (boxComponents[i + 1][j + 1].isAlive === true) {
+//             numOfLivingNeighbors += 1;
+//         }
+//     }
+//     return numOfLivingNeighbors;
 // }
