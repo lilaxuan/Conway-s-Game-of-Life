@@ -1,17 +1,14 @@
-// import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 
-// // Create Context
-// const CountContext = createContext({
-//     updateInitialCount: () => { }, // Initial dummy function
-// }
-// );
+// Create Context
+const CountContext = createContext();
 
-// // Custom hook to use the context
-// export function CountProvider() {
-//     return useContext(CountContext);
-// }
+// Custom hook to use the context
+export function CountProvider() {
+    return useContext(CountContext);
+}
 
-// export { CountContext };
+export { CountContext };
 
 // import React, { createContext, useState, useContext } from 'react';
 
@@ -41,20 +38,20 @@
 // // Custom hook to use the count context
 // export const useCount = () => useContext(CountContext);
 
-import React, { createContext, useState, useContext } from 'react';
+// import React, { createContext, useState, useContext } from 'react';
 
-// Create the context
-const CountContext = createContext();
+// // Create the context
+// const CountContext = createContext();
 
-// Provider component
-export const CountProvider = (props) => {
-    const [good_count, setGoodCount] = useState(props.good_count);
+// // Provider component
+// export const CountProvider = (props) => {
+//     const [good_count, setGoodCount] = useState(props.good_count);
 
-    return (
-        <CountContext.Provider value={{ good_count, setGoodCount }}>
-            {props.children}
-        </CountContext.Provider>
-    );
-};
+//     return (
+//         <CountContext.Provider value={{ good_count, setGoodCount }}>
+//             {props.children}
+//         </CountContext.Provider>
+//     );
+// };
 
-export { CountContext };
+// export { CountContext };
