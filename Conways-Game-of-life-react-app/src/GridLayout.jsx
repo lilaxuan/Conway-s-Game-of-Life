@@ -4,49 +4,46 @@ import './GridLayout.css';
 
 
 export default function GridLayout() {
-    const [rows, setRows] = useState(20);
-    const [cols, setCols] = useState(20);
-    const [inputRows, setInputRows] = useState(20); // save the input values
-    const [inputCols, setInputCols] = useState(20);
+    const INITIAL_ROWS = 20;
+    const INITIAL_COLS = 20;
+    const [rows, setRows] = useState(INITIAL_ROWS);
+    const [cols, setCols] = useState(INITIAL_COLS);
+    const [inputRows, setInputRows] = useState(INITIAL_ROWS); // save the input values
+    const [inputCols, setInputCols] = useState(INITIAL_COLS);
     const [error, setError] = useState('');
     const gridContainerRef = useRef(null); // Ref for accessing the grid container to change the rows and cols for the grid
-    const chosenIndices = genRandomIndicesForAliveBoxes(rows, cols);
-    // const initialBoxComponents = buildInitialGrid(chosenIndices);
-    // const [boxComponents, setBoxComponents] = useState(initialBoxComponents);
+    // const initialBoxComponents = buildInitialGrid(chosenIndices, rows, cols);
+    // console.log('hihihihihihihihi-1111111');
+    // console.log('hihihihihihihihi-222222');
+    // console.log('initial chosen indecies: ', chosenIndices);
+    // console.log('hihihi_initial box components is: ', initialBoxComponents);
+    // const [boxComponents, setBoxComponents] = useState([initialBoxComponents]);
+    // const [boxComponents, setBoxComponents] = useState([]);
 
-    function buildEmptyGrid() {
-        let boxComponents = [];
-        for (let i = 0; i < rows; i++) {
-            let row = [];
-            for (let j = 0; j < cols; j++) {
-                row.push(<BoxComponent key={`${i}-${j}`} />);
-            }
-            boxComponents.push(row);
-        }
-        return boxComponents;
-    };
 
-    function resetGrid() {
+    // Reset the Grid dimension based on users' inputs
+    function resetGridSize() {
         if (inputRows < 3 || inputRows > 40 || inputCols < 3 || inputCols > 40) {
             setError('Please enter values between 3 and 40 for both width and height.');
             return;
         }
         setError('');
+        // setBoxComponents([]); // need to empty out the boxComponents, otherwise new elements will be continued to be pushed into the array
         setRows(inputRows);
         setCols(inputCols);
-        console.log('hihihi');
-        const boxComponents = buildGrid();
-        console.log('hihihi2');
-        console.log(boxComponents);
-        console.log(boxComponents[1]);
-        console.log(boxComponents[1][2]);
-        boxComponents[1][2]
-        for (let i = 0; i < boxComponents.length; i++) {
-            for (let j = 0; j < boxComponents[0].length; j++) {
-                console.log(hihihi)
-                console.log(boxComponents[i][j]);
-            }
-        }
+        // console.log('hihihi');
+        // const boxComponents = buildGrid();
+        // console.log('hihihi2');
+        // console.log(boxComponents);
+        // console.log(boxComponents[1]);
+        // console.log(boxComponents[1][2]);
+        // boxComponents[1][2]
+        // for (let i = 0; i < boxComponents.length; i++) {
+        //     for (let j = 0; j < boxComponents[0].length; j++) {
+        //         console.log(hihihi)
+        //         console.log(boxComponents[i][j]);
+        //     }
+        // }
     };
 
     // useEffect better not nested in another function 
@@ -58,6 +55,7 @@ export default function GridLayout() {
         }
     }, [rows, cols]);
 
+    // Generate random incides for living cells for the initial Grid
     function genRandomIndicesForAliveBoxes(rows, cols) {
         const chosenIndices = [];
         for (let i = 0; i < rows; i++) {
@@ -73,37 +71,39 @@ export default function GridLayout() {
         return chosenIndices;
     }
 
-    // Function to check if an array contains a pair [i, j]
-    function containsArray(arrOfArr, targetArr) {
-        return arrOfArr.some(subArr =>
-            subArr.length === targetArr.length && subArr.every((value, index) => value === targetArr[index])
-        );
-    }
-
-
     // Choose random 5% cells to be alive; Pass the background color props to the child BoxComponent
-    function buildInitialGrid(chosenIndices) {
+    function buildGrid(chosenIndices, rows, cols) {
         // Create the initial 20 * 20 boxComponents/grids
-        // let boxComponents = [];
-        // for (let i = 0; i < rows; i++) {
-        //     let row = [];
-        //     for (let j = 0; j < cols; j++) {
-        //         row.push(<BoxComponent key={`${i}-${j}`} />);
-        //     }
-        //     boxComponents.push(row);
-        // }
-
         let boxComponents = [];
+        // console.log('in buildInitialGrid: row is: ', rows);
+        // console.log('in buildInitialGrid: row is: ', cols);
+        console.log('1111111111111-rows: ', rows);
+        console.log('1111111111111-cols: ', cols);
         for (let i = 0; i < rows; i++) {
+            let row = [];
             for (let j = 0; j < cols; j++) {
                 if (containsArray(chosenIndices, [i, j])) {
-                    boxComponents.push(<BoxComponent key={`${i}-${j}`} isAlive={true} />);
+                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} />); // can pass x and y; 
                 } else {
-                    boxComponents.push(<BoxComponent key={`${i}-${j}`} isAlive={false} />);
+                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} />);
                 }
-
+                // row.push(<BoxComponent key={`${i}-${j}`} />);
             }
+            boxComponents.push(row);
         }
+
+        console.log('1111111111-boxComponents: ', boxComponents);
+        // let boxComponents = [];
+        // for (let i = 0; i < rows; i++) {
+        //     for (let j = 0; j < cols; j++) {
+        //         if (containsArray(chosenIndices, [i, j])) {
+        //             boxComponents.push(<BoxComponent key={`${i}-${j}`} isAlive={true} />); // can pass x and y; 
+        //         } else {
+        //             boxComponents.push(<BoxComponent key={`${i}-${j}`} isAlive={false} />);
+        //         }
+
+        //     }
+        // }
 
         // Set random 5% cells to be alive(Black)
         // const isAlive = true;
@@ -111,12 +111,55 @@ export default function GridLayout() {
         //     <BoxComponent key={`${i}-${j}`} alive={isAlive} />
         // }
 
+        // console.log('in build initial grid-boxComponents: ', boxComponents);
         return boxComponents;
     };
 
+    // Function to check if an array contains a pair [i, j]
+    function containsArray(arrOfArr, targetArr) {
+        return arrOfArr.some(subArr =>
+            subArr.length === targetArr.length && subArr.every((value, index) => value === targetArr[index])
+        );
+    }
+
+    // Reset Grid to the original 20*20 dimension with 5% living cells
+    function resetGrid() {
+        // // No need to update the boxComponents, since it will re-render the whole page(run the whole scripts), then the boxComponents will be changed again; 
+        // just need to updates the rows and cols. So when those data has been changed, the page will be re-rendered again. So the boxComponents will be re-rendered. 
+        // console.log('in reset grid: initial_rows are: ', INITIAL_ROWS);
+        // const chosenIndices = genRandomIndicesForAliveBoxes(INITIAL_ROWS, INITIAL_COLS);
+        // console.log('in reset grid: chosen indices are: ', chosenIndices);
+        // let boxComponents = buildInitialGrid(chosenIndices, INITIAL_ROWS, INITIAL_COLS);
+        // console.log('in reset grid: boxComponents are: ', boxComponents);
+        // setBoxComponents(boxComponents);
+        setRows(INITIAL_ROWS);
+        setCols(INITIAL_COLS);
+    }
+
+    // updates the boxComponents grid based on the rules
+    function performRules(boxComponents) {
+        for (let i = 0; i < boxComponents.length; i++) {
+            for (let j = 0; j < boxComponents[i].length; j++) {
+                if (boxComponents[i][j].isAlive === true) {
+
+                }
+
+                if (i == 4 && j == 5) {
+                    boxComponents[i][j].isAlive = false;
+                }
+            }
+        }
+    }
+
+    const chosenIndices = genRandomIndicesForAliveBoxes(rows, cols);
+    // let boxComponentsLatest = buildGrid(chosenIndices, rows, cols);
+    // setBoxComponents(boxComponentsLatest);
+    const boxComponents = buildGrid(chosenIndices, rows, cols);
+
+
 
     // let boxComponents = buildEmptyGrid();
-    let boxComponents = buildInitialGrid(chosenIndices);
+    // let boxComponents = buildInitialGrid(chosenIndices, rows, cols);
     return (
         <div className='content'>
             <div className='form-container my-4'>
@@ -134,13 +177,17 @@ export default function GridLayout() {
                     onChange={(e) => setInputRows(parseInt(e.target.value) || 0)}
                     value={inputRows} />
 
-                <button onClick={resetGrid} className="btn btn-primary">Submit</button>
+                <button onClick={resetGridSize} className="btn btn-primary">Submit</button>
                 {error && <div className="alert alert-danger mt-3">{error}</div>}
             </div>
             <div className='grid-background'>
                 <div className="grid-container" ref={gridContainerRef}>
                     {boxComponents}
                 </div>
+            </div>
+            <div className='form-container'>
+                <button onClick={resetGrid} className="btn btn-primary">Reset</button>
+                <button onClick={resetGrid} className="btn btn-primary">Run Simulation</button>
             </div>
         </div>
     )

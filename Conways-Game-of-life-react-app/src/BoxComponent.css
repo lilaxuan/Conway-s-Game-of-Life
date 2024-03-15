@@ -1,6 +1,6 @@
 .box {
     width: 20px;
-    height: 20px;
+    height: 100%;
     border: 1px solid gray;
     transition: background-color 0.3s;
 }
