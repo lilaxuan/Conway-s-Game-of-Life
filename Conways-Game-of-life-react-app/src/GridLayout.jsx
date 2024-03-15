@@ -13,11 +13,7 @@ export default function GridLayout() {
     const [error, setError] = useState('');
     const gridContainerRef = useRef(null); // Ref for accessing the grid container to change the rows and cols for the grid
     // const initialBoxComponents = buildInitialGrid(chosenIndices, rows, cols);
-    // console.log('hihihihihihihihi-1111111');
-    // console.log('hihihihihihihihi-222222');
-    // console.log('initial chosen indecies: ', chosenIndices);
-    // console.log('hihihi_initial box components is: ', initialBoxComponents);
-    // const [boxComponents, setBoxComponents] = useState([initialBoxComponents]);
+    // const [boxComponents, setBoxComponents] = useState([initialBoxComponents]); // no need to set up boxComponents using state, otherwise it'll be rendered a lot of times. 
     // const [boxComponents, setBoxComponents] = useState([]);
 
 
@@ -28,7 +24,6 @@ export default function GridLayout() {
             return;
         }
         setError('');
-        // setBoxComponents([]); // need to empty out the boxComponents, otherwise new elements will be continued to be pushed into the array
         setRows(inputRows);
         setCols(inputCols);
         // console.log('hihihi');
@@ -75,10 +70,8 @@ export default function GridLayout() {
     function buildGrid(chosenIndices, rows, cols) {
         // Create the initial 20 * 20 boxComponents/grids
         let boxComponents = [];
-        // console.log('in buildInitialGrid: row is: ', rows);
-        // console.log('in buildInitialGrid: row is: ', cols);
-        console.log('1111111111111-rows: ', rows);
-        console.log('1111111111111-cols: ', cols);
+        // console.log('1111111111111-rows: ', rows);
+        // console.log('1111111111111-cols: ', cols);
         for (let i = 0; i < rows; i++) {
             let row = [];
             for (let j = 0; j < cols; j++) {
@@ -92,25 +85,7 @@ export default function GridLayout() {
             boxComponents.push(row);
         }
 
-        console.log('1111111111-boxComponents: ', boxComponents);
-        // let boxComponents = [];
-        // for (let i = 0; i < rows; i++) {
-        //     for (let j = 0; j < cols; j++) {
-        //         if (containsArray(chosenIndices, [i, j])) {
-        //             boxComponents.push(<BoxComponent key={`${i}-${j}`} isAlive={true} />); // can pass x and y; 
-        //         } else {
-        //             boxComponents.push(<BoxComponent key={`${i}-${j}`} isAlive={false} />);
-        //         }
-
-        //     }
-        // }
-
-        // Set random 5% cells to be alive(Black)
-        // const isAlive = true;
-        // for (let [i, j] in chosenIndices) {
-        //     <BoxComponent key={`${i}-${j}`} alive={isAlive} />
-        // }
-
+        // console.log('1111111111-boxComponents: ', boxComponents);
         // console.log('in build initial grid-boxComponents: ', boxComponents);
         return boxComponents;
     };
@@ -126,12 +101,6 @@ export default function GridLayout() {
     function resetGrid() {
         // // No need to update the boxComponents, since it will re-render the whole page(run the whole scripts), then the boxComponents will be changed again; 
         // just need to updates the rows and cols. So when those data has been changed, the page will be re-rendered again. So the boxComponents will be re-rendered. 
-        // console.log('in reset grid: initial_rows are: ', INITIAL_ROWS);
-        // const chosenIndices = genRandomIndicesForAliveBoxes(INITIAL_ROWS, INITIAL_COLS);
-        // console.log('in reset grid: chosen indices are: ', chosenIndices);
-        // let boxComponents = buildInitialGrid(chosenIndices, INITIAL_ROWS, INITIAL_COLS);
-        // console.log('in reset grid: boxComponents are: ', boxComponents);
-        // setBoxComponents(boxComponents);
         setRows(INITIAL_ROWS);
         setCols(INITIAL_COLS);
     }
@@ -156,10 +125,6 @@ export default function GridLayout() {
     // setBoxComponents(boxComponentsLatest);
     const boxComponents = buildGrid(chosenIndices, rows, cols);
 
-
-
-    // let boxComponents = buildEmptyGrid();
-    // let boxComponents = buildInitialGrid(chosenIndices, rows, cols);
     return (
         <div className='content'>
             <div className='form-container my-4'>
