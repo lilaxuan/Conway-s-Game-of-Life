@@ -4,6 +4,7 @@ import Personal from './Personal';
 import GridLayout from './GridLayout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePageContent from './HomePageContent';
+import { CountProvider } from './CountProvider';
 
 export default function Home() {
 

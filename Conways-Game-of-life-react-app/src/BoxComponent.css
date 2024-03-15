@@ -5,6 +5,11 @@
     transition: background-color 0.3s;
 }
 
+.adjustBoxSizeClass {
+    width: 10px;
+    height: 10px;
+}
+
 .livingBlackColor {
     background-color: #333;
 }

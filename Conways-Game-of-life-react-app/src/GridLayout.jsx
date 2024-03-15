@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import BoxComponent from './BoxComponent';
 import './GridLayout.css';
+import { CountContext } from './CountProvider';
+// import { CountContext, CountProvider, useCount} from './CountProvider';
 
 
 export default function GridLayout() {
@@ -15,7 +17,24 @@ export default function GridLayout() {
     // const initialBoxComponents = buildInitialGrid(chosenIndices, rows, cols);
     // const [boxComponents, setBoxComponents] = useState([initialBoxComponents]); // no need to set up boxComponents using state, otherwise it'll be rendered a lot of times. 
     // const [boxComponents, setBoxComponents] = useState([]);
+    console.log('hihihi123');
+    // const [count, setCount] = useState(0);
+    // const { count } = useCount();
+    // const chosenIndices = genRandomIndicesForAliveBoxes(rows, cols);
+    // let count = 0; // we don't want re-render every time count changes; otherwise it'll get into a inifinite loop
+    console.log('hihihihihihihihi1111111111');
+    console.log('hihihihihihihihi1111111111');
+    const [chosenIndices, setChosenIndices] = useState(genRandomIndicesForAliveBoxes(INITIAL_ROWS, INITIAL_COLS));
+    // const [initialCount, setInitialCount] = useState(chosenIndices.size);
+    const [count, setCount] = useState(0);
 
+    useEffect(() => {
+        setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols));
+    }, [rows, cols]);
+
+    // useEffect(() => {
+    //     setInitialCount(chosenIndices.size); // Update initial count based on chosenIndices
+    // }, chosenIndices); // Recalculate when rows or cols change
 
     // Reset the Grid dimension based on users' inputs
     function resetGridSize() {
@@ -52,33 +71,51 @@ export default function GridLayout() {
 
     // Generate random incides for living cells for the initial Grid
     function genRandomIndicesForAliveBoxes(rows, cols) {
-        const chosenIndices = [];
+        const chosenIndices = new Set();
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
                 // Generate a random number between 0 and 1
                 const rand = Math.random();
                 if (rand < 0.05) {
-                    chosenIndices.push([i, j]);
+                    // chosenIndices.push([i, j]);
+                    chosenIndices.add([i, j]);
+
                 }
             }
         }
-        console.log('chosen indices to be alive are: ', chosenIndices);
+        // console.log('chosen indices to be alive are: ', chosenIndices);
         return chosenIndices;
     }
 
     // Choose random 5% cells to be alive; Pass the background color props to the child BoxComponent
     function buildGrid(chosenIndices, rows, cols) {
         // Create the initial 20 * 20 boxComponents/grids
+        // let adjustBoxSize = false;
+        // if (rows > 22) {
+        //     adjustBoxSize = true;
+        // }
         let boxComponents = [];
+        console.log('in buildGrid-chosenIndices: ', chosenIndices);
         // console.log('1111111111111-rows: ', rows);
         // console.log('1111111111111-cols: ', cols);
         for (let i = 0; i < rows; i++) {
             let row = [];
             for (let j = 0; j < cols; j++) {
-                if (containsArray(chosenIndices, [i, j])) {
-                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} />); // can pass x and y; 
+                // if (containsArray(chosenIndices, [i, j])) {
+                if (setHasArray(chosenIndices, [i, j]) === true) {
+                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} />);
+                    // if (adjustBoxSize === true) {
+                    //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={true} />); // can pass x and y; 
+                    // } else {
+                    //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={false} />);
+                    // }
                 } else {
                     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} />);
+                    // if (adjustBoxSize === true) {
+                    //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} adjustBoxSize={true} />);
+                    // } else {
+                    //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} adjustBoxSize={false} />);
+                    // }
                 }
                 // row.push(<BoxComponent key={`${i}-${j}`} />);
             }
@@ -91,10 +128,21 @@ export default function GridLayout() {
     };
 
     // Function to check if an array contains a pair [i, j]
-    function containsArray(arrOfArr, targetArr) {
-        return arrOfArr.some(subArr =>
-            subArr.length === targetArr.length && subArr.every((value, index) => value === targetArr[index])
-        );
+    // function containsArray(arrOfArr, targetArr) {
+    //     return arrOfArr.some(subArr =>
+    //         subArr.length === targetArr.length && subArr.every((value, index) => value === targetArr[index])
+    //     );
+    // }
+    // const exists = array.includes(item);
+    // const exists = mySet.has(item); // only the same object will return true
+
+    function setHasArray(set, arrayToFind) {
+        for (const item of set) {
+            if (Array.isArray(item) && arrayToFind.length === item.length && arrayToFind.every((val, index) => val === item[index])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Reset Grid to the original 20*20 dimension with 5% living cells
@@ -120,40 +168,59 @@ export default function GridLayout() {
         }
     }
 
-    const chosenIndices = genRandomIndicesForAliveBoxes(rows, cols);
+    // console.log('hihihi-jiaxuanli');
+    // const chosenIndices = genRandomIndicesForAliveBoxes(rows, cols);
+    // const initial_count = chosenIndices.size;
+
+    // console.log('chosenIndices 111111: ', chosenIndices);
+    // console.log('initial_count 1111111: ', initial_count);
     // let boxComponentsLatest = buildGrid(chosenIndices, rows, cols);
     // setBoxComponents(boxComponentsLatest);
     const boxComponents = buildGrid(chosenIndices, rows, cols);
 
     return (
-        <div className='content'>
-            <div className='form-container my-4'>
-                <p>Reset the grid width and height</p>
-                <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Width"
-                    onChange={(e) => setInputCols(parseInt(e.target.value) || 0)}
-                    value={inputCols} />
-                <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Height"
-                    onChange={(e) => setInputRows(parseInt(e.target.value) || 0)}
-                    value={inputRows} />
+        // <CountContext.Provider value={{ count, setCount }}>
+        // <CountProvider initialCount={initialCount}>
+        <CountContext.Provider value={{ count, setCount }}>
+            <div className='content'>
+                {/* <div className='part'> */}
+                <div className='form-container my-4'>
+                    <p>Reset the grid width and height</p>
+                    <input
+                        type="text"
+                        className="form-control mb-3"
+                        placeholder="Width"
+                        onChange={(e) => setInputCols(parseInt(e.target.value) || 0)}
+                        value={inputCols} />
+                    <input
+                        type="text"
+                        className="form-control mb-3"
+                        placeholder="Height"
+                        onChange={(e) => setInputRows(parseInt(e.target.value) || 0)}
+                        value={inputRows} />
 
-                <button onClick={resetGridSize} className="btn btn-primary">Submit</button>
-                {error && <div className="alert alert-danger mt-3">{error}</div>}
-            </div>
-            <div className='grid-background'>
-                <div className="grid-container" ref={gridContainerRef}>
-                    {boxComponents}
+                    <button onClick={resetGridSize} className="btn btn-primary">Submit</button>
+                    {error && <div className="alert alert-danger mt-3">{error}</div>}
                 </div>
+                {/* </div> */}
+                {/* <div className='part2'> */}
+                {/* <div grid-count-heatmap-container> */}
+                <div>Current Living Cells: {count}</div>
+                <div className='grid-background'>
+                    <div className="grid-container" ref={gridContainerRef}>
+                        {boxComponents}
+                    </div>
+                </div>
+                {/* </div> */}
+                {/* </div> */}
+                {/* <div className='part'> */}
+                <div className='form-container form-control-bottom'>
+                    <button onClick={resetGrid} className="btn btn-primary">Reset</button>
+                    <button onClick={resetGrid} className="btn btn-primary">Run Simulation</button>
+                </div>
+                {/* </div> */}
             </div>
-            <div className='form-container'>
-                <button onClick={resetGrid} className="btn btn-primary">Reset</button>
-                <button onClick={resetGrid} className="btn btn-primary">Run Simulation</button>
-            </div>
-        </div>
+            {/* </CountProvider> */}
+        </CountContext.Provider>
     )
 }
