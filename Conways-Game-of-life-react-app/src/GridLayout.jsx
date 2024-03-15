@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import BoxComponent from './BoxComponent';
 import './GridLayout.css';
 import { CountContext } from './CountProvider';
-// import { CountContext, CountProvider, useCount} from './CountProvider';
 
 
 const initialGridState = (rows, cols) => {
@@ -10,7 +9,6 @@ const initialGridState = (rows, cols) => {
     for (let i = 0; i < rows; i++) {
         const row = [];
         for (let j = 0; j < cols; j++) {
-            // row.push(Math.random() < 0.05); // 5% chance of being alive
             if (Math.random() < 0.05) {
                 row.push(true);
             } else {
@@ -32,25 +30,9 @@ export default function GridLayout() {
     const [inputCols, setInputCols] = useState(INITIAL_COLS);
     const [error, setError] = useState('');
     const gridContainerRef = useRef(null); // Ref for accessing the grid container to change the rows and cols for the grid
-    // const [boxComponents, setBoxComponents] = useState([initialBoxComponents]); // no need to set up boxComponents using state, otherwise it'll be rendered a lot of times. 
-    console.log('hihihihihihihihi1111111111');
+    // console.log('hihihihihihihihi1111111111');
     const [grid, setGrid] = useState(() => initialGridState(rows, cols));
-
-    // const initialRandomIndices = genRandomIndicesForAliveBoxes(rows, cols);
-    // const [chosenIndices, setChosenIndices] = useState(initialRandomIndices);
-    // const [initialCount, setInitialCount] = useState(chosenIndices.size);
     const [count, setCount] = useState(0);
-    // const { good_count, setGoodCount } = useContext(CountContext); // Use the context
-    // console.log('in gridlayout chosenIndices: ', chosenIndices);
-    // console.log('in Gridlayout initial count is: ', initialCount);
-
-
-    // useEffect(() => {
-    //     // This ensures count is updated whenever initialCount changes
-    //     // setCount(initialCount);
-    //     setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols)); // somehow不知道为什么rows和cols改变的时候，这个chosenindices根本没有改变？？
-    //     setGoodCount(chosenIndices.size);
-    // }, [rows, cols]);
 
 
     useEffect(() => {
@@ -70,11 +52,6 @@ export default function GridLayout() {
         }
         return livingCellsCount;
     }
-    const toggleCellState = (rowIndex, colIndex) => {
-        const newGrid = [...grid];
-        newGrid[rowIndex][colIndex] = !newGrid[rowIndex][colIndex];
-        setGrid(newGrid);
-    };
 
     // Reset the Grid dimension based on users' inputs
     function resetGridSize() {
@@ -85,12 +62,6 @@ export default function GridLayout() {
         setError('');
         setRows(inputRows);
         setCols(inputCols);
-        // setGrid(initialGridState(inputRows, inputCols));
-        // setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols)); // somehow不知道为什么rows和cols改变的时候，这个chosenindices根本没有改变？？
-        // setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols));
-        // setInitialCount(chosenIndices.size);
-        // setCount(initialCount);
-
         // console.log('hihihi');
         // const boxComponents = buildGrid();
         // console.log('hihihi2');
@@ -116,59 +87,6 @@ export default function GridLayout() {
     }, [rows, cols]);
 
 
-    // genRandomIndicesForAliveBoxes(rows, cols);
-    // Generate random incides for living cells for the initial Grid
-    // function genRandomIndicesForAliveBoxes(rows, cols) {
-    //     const chosenIndices = new Set();
-    //     for (let i = 0; i < rows; i++) {
-    //         for (let j = 0; j < cols; j++) {
-    //             // Generate a random number between 0 and 1
-    //             const rand = Math.random();
-    //             if (rand < 0.05) {
-    //                 // chosenIndices.push([i, j]);
-    //                 chosenIndices.add([i, j]);
-    //             }
-    //         }
-    //     }
-    //     // console.log('chosen indices to be alive are: ', chosenIndices);
-    //     return chosenIndices;
-    //     // setChosenIndices(chosenIndices);
-    // }
-
-    // Choose random 5% cells to be alive; Pass the background color props to the child BoxComponent
-    // function buildGrid(chosenIndices, rows, cols) {
-    //     let boxComponents = [];
-    //     console.log('in buildGrid-chosenIndices: ', chosenIndices);
-    //     for (let i = 0; i < rows; i++) {
-    //         let row = [];
-    //         for (let j = 0; j < cols; j++) {
-    //             // if (containsArray(chosenIndices, [i, j])) {
-    //             if (setHasArray(chosenIndices, [i, j]) === true) {
-    //                 row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} x={i} y={j} />);
-    //                 // if (adjustBoxSize === true) {
-    //                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={true} />); // can pass x and y; 
-    //                 // } else {
-    //                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={false} />);
-    //                 // }
-    //             } else {
-    //                 row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} x={i} y={j} />);
-    //                 // if (adjustBoxSize === true) {
-    //                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} adjustBoxSize={true} />);
-    //                 // } else {
-    //                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} adjustBoxSize={false} />);
-    //                 // }
-    //             }
-    //             // row.push(<BoxComponent key={`${i}-${j}`} />);
-    //         }
-    //         boxComponents.push(row);
-    //     }
-
-    //     // console.log('1111111111-boxComponents: ', boxComponents);
-    //     // console.log('in build initial grid-boxComponents: ', boxComponents);
-    //     return boxComponents;
-    // };
-
-
     function buildGrid(grid) {
         let boxComponents = [];
         for (let i = 0; i < rows; i++) {
@@ -185,36 +103,6 @@ export default function GridLayout() {
         }
         return boxComponents;
     };
-
-
-    // Function to check if an array contains a pair [i, j]
-    // function containsArray(arrOfArr, targetArr) {
-    //     return arrOfArr.some(subArr =>
-    //         subArr.length === targetArr.length && subArr.every((value, index) => value === targetArr[index])
-    //     );
-    // }
-    // const exists = array.includes(item);
-    // const exists = mySet.has(item); // only the same object will return true
-
-    function setHasArray(set, arrayToFind) {
-        for (const item of set) {
-            if (Array.isArray(item) && arrayToFind.length === item.length && arrayToFind.every((val, index) => val === item[index])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Function to delete an array from the set based on its elements
-    function deleteArrayFromSet(set, arrayToDelete) {
-        for (let item of set) {
-            if (Array.isArray(item) && item.length === arrayToDelete.length && item.every((value, index) => value === arrayToDelete[index])) {
-                set.delete(item);
-                return true; // Return true if an array was found and deleted
-            }
-        }
-        return false; // Return false if the array was not found
-    }
 
 
     // Reset Grid to the original 20*20 dimension with 5% living cells
@@ -268,11 +156,6 @@ export default function GridLayout() {
 
             }
         }
-        // 更新chosenIndices状态
-        // setChosenIndices(newChosenIndices);
-        // buildGrid(chosenIndices, rows, cols); // 重新根据chosen indices去build up这个grid。 
-        // 根据新的chosenIndices更新good_count
-        // setGoodCount(newChosenIndices.size);
     }
 
     // check the number of living neighbors cells and dead neighbor cells of a cell (i, j)
@@ -329,7 +212,6 @@ export default function GridLayout() {
             }
         }
         return numOfLivingNeighbors;
-
     }
 
     // const boxComponents = buildGrid(chosenIndices, rows, cols);
@@ -384,3 +266,89 @@ export default function GridLayout() {
         </CountContext.Provider>
     )
 }
+
+
+
+// Function to check if an array contains a pair [i, j]
+// function containsArray(arrOfArr, targetArr) {
+//     return arrOfArr.some(subArr =>
+//         subArr.length === targetArr.length && subArr.every((value, index) => value === targetArr[index])
+//     );
+// }
+// const exists = array.includes(item);
+// const exists = mySet.has(item); // only the same object will return true
+
+
+
+// genRandomIndicesForAliveBoxes(rows, cols);
+// Generate random incides for living cells for the initial Grid
+// function genRandomIndicesForAliveBoxes(rows, cols) {
+//     const chosenIndices = new Set();
+//     for (let i = 0; i < rows; i++) {
+//         for (let j = 0; j < cols; j++) {
+//             // Generate a random number between 0 and 1
+//             const rand = Math.random();
+//             if (rand < 0.05) {
+//                 // chosenIndices.push([i, j]);
+//                 chosenIndices.add([i, j]);
+//             }
+//         }
+//     }
+//     // console.log('chosen indices to be alive are: ', chosenIndices);
+//     return chosenIndices;
+//     // setChosenIndices(chosenIndices);
+// }
+
+// Choose random 5% cells to be alive; Pass the background color props to the child BoxComponent
+// function buildGrid(chosenIndices, rows, cols) {
+//     let boxComponents = [];
+//     console.log('in buildGrid-chosenIndices: ', chosenIndices);
+//     for (let i = 0; i < rows; i++) {
+//         let row = [];
+//         for (let j = 0; j < cols; j++) {
+//             // if (containsArray(chosenIndices, [i, j])) {
+//             if (setHasArray(chosenIndices, [i, j]) === true) {
+//                 row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} x={i} y={j} />);
+//                 // if (adjustBoxSize === true) {
+//                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={true} />); // can pass x and y;
+//                 // } else {
+//                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={false} />);
+//                 // }
+//             } else {
+//                 row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} x={i} y={j} />);
+//                 // if (adjustBoxSize === true) {
+//                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} adjustBoxSize={true} />);
+//                 // } else {
+//                 //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} adjustBoxSize={false} />);
+//                 // }
+//             }
+//             // row.push(<BoxComponent key={`${i}-${j}`} />);
+//         }
+//         boxComponents.push(row);
+//     }
+
+//     // console.log('1111111111-boxComponents: ', boxComponents);
+//     // console.log('in build initial grid-boxComponents: ', boxComponents);
+//     return boxComponents;
+// };
+
+
+// function setHasArray(set, arrayToFind) {
+//     for (const item of set) {
+//         if (Array.isArray(item) && arrayToFind.length === item.length && arrayToFind.every((val, index) => val === item[index])) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+// // Function to delete an array from the set based on its elements
+// function deleteArrayFromSet(set, arrayToDelete) {
+//     for (let item of set) {
+//         if (Array.isArray(item) && item.length === arrayToDelete.length && item.every((value, index) => value === arrayToDelete[index])) {
+//             set.delete(item);
+//             return true; // Return true if an array was found and deleted
+//         }
+//     }
+//     return false; // Return false if the array was not found
+// }
