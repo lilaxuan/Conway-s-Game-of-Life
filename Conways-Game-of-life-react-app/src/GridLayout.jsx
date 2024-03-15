@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import BoxComponent from './BoxComponent';
 import './GridLayout.css';
 import { CountContext } from './CountProvider';
@@ -14,27 +14,27 @@ export default function GridLayout() {
     const [inputCols, setInputCols] = useState(INITIAL_COLS);
     const [error, setError] = useState('');
     const gridContainerRef = useRef(null); // Ref for accessing the grid container to change the rows and cols for the grid
-    // const initialBoxComponents = buildInitialGrid(chosenIndices, rows, cols);
     // const [boxComponents, setBoxComponents] = useState([initialBoxComponents]); // no need to set up boxComponents using state, otherwise it'll be rendered a lot of times. 
-    // const [boxComponents, setBoxComponents] = useState([]);
-    console.log('hihihi123');
-    // const [count, setCount] = useState(0);
-    // const { count } = useCount();
-    // const chosenIndices = genRandomIndicesForAliveBoxes(rows, cols);
-    // let count = 0; // we don't want re-render every time count changes; otherwise it'll get into a inifinite loop
     console.log('hihihihihihihihi1111111111');
-    console.log('hihihihihihihihi1111111111');
-    const [chosenIndices, setChosenIndices] = useState(genRandomIndicesForAliveBoxes(INITIAL_ROWS, INITIAL_COLS));
-    // const [initialCount, setInitialCount] = useState(chosenIndices.size);
-    const [count, setCount] = useState(0);
+    const [chosenIndices, setChosenIndices] = useState(genRandomIndicesForAliveBoxes(rows, cols));
+    const [initialCount, setInitialCount] = useState(chosenIndices.size);
+    // const [count, setCount] = useState(initialCount);
+    const { good_count, setGoodCount } = useContext(CountContext); // Use the context
+    console.log('in gridlayout chosenIndices: ', chosenIndices);
+    console.log('in Gridlayout initial count is: ', initialCount);
+
+
+    // // Function to update the state, provided to children
+    // const updateInitialCount = (count) => {
+    //     setInitialCount(count);
+    // };
 
     useEffect(() => {
-        setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols));
+        // This ensures count is updated whenever initialCount changes
+        // setCount(initialCount);
+        setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols)); // somehow不知道为什么rows和cols改变的时候，这个chosenindices根本没有改变？？
+        setGoodCount(chosenIndices.size);
     }, [rows, cols]);
-
-    // useEffect(() => {
-    //     setInitialCount(chosenIndices.size); // Update initial count based on chosenIndices
-    // }, chosenIndices); // Recalculate when rows or cols change
 
     // Reset the Grid dimension based on users' inputs
     function resetGridSize() {
@@ -45,6 +45,11 @@ export default function GridLayout() {
         setError('');
         setRows(inputRows);
         setCols(inputCols);
+        // setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols)); // somehow不知道为什么rows和cols改变的时候，这个chosenindices根本没有改变？？
+        // setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols));
+        // setInitialCount(chosenIndices.size);
+        // setCount(initialCount);
+
         // console.log('hihihi');
         // const boxComponents = buildGrid();
         // console.log('hihihi2');
@@ -69,6 +74,13 @@ export default function GridLayout() {
         }
     }, [rows, cols]);
 
+    // useEffect(() => {
+    //     setChosenIndices(genRandomIndicesForAliveBoxes(rows, cols));
+    //     setInitialCount(chosenIndices.size); // Update initial count based on chosenIndices
+    //     setCount(initialCount)
+    //     console.log("initial count has been changed: ", initialCount);
+    // }, [rows, cols]);
+
     // Generate random incides for living cells for the initial Grid
     function genRandomIndicesForAliveBoxes(rows, cols) {
         const chosenIndices = new Set();
@@ -89,28 +101,21 @@ export default function GridLayout() {
 
     // Choose random 5% cells to be alive; Pass the background color props to the child BoxComponent
     function buildGrid(chosenIndices, rows, cols) {
-        // Create the initial 20 * 20 boxComponents/grids
-        // let adjustBoxSize = false;
-        // if (rows > 22) {
-        //     adjustBoxSize = true;
-        // }
         let boxComponents = [];
         console.log('in buildGrid-chosenIndices: ', chosenIndices);
-        // console.log('1111111111111-rows: ', rows);
-        // console.log('1111111111111-cols: ', cols);
         for (let i = 0; i < rows; i++) {
             let row = [];
             for (let j = 0; j < cols; j++) {
                 // if (containsArray(chosenIndices, [i, j])) {
                 if (setHasArray(chosenIndices, [i, j]) === true) {
-                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} />);
+                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} x={i} y={j} />);
                     // if (adjustBoxSize === true) {
                     //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={true} />); // can pass x and y; 
                     // } else {
                     //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} adjustBoxSize={false} />);
                     // }
                 } else {
-                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} />);
+                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} x={i} y={j} />);
                     // if (adjustBoxSize === true) {
                     //     row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} adjustBoxSize={true} />);
                     // } else {
@@ -154,34 +159,110 @@ export default function GridLayout() {
     }
 
     // updates the boxComponents grid based on the rules
-    function performRules(boxComponents) {
+    function runSimulation(boxComponents) {
+        console.log('hihihi-run simulation456!!!');
+        console.log('run-simulation-boxComponents: ', boxComponents);
         for (let i = 0; i < boxComponents.length; i++) {
             for (let j = 0; j < boxComponents[i].length; j++) {
-                if (boxComponents[i][j].isAlive === true) {
-
+                let numOfLivingNeighbors = countLivingAndDeadNeighbors(boxComponents, i, j)
+                console.log('num of living neighbors for current pos i-j-numoflivingneighbor', i, j, numOfLivingNeighbors);
+                //1. A dead cell with exactly three live neighbours becomes a live cell,
+                if (boxComponents[i][j].isAlive === false) {
+                    if (numOfLivingNeighbors === 3) {
+                        // boxComponents[i][j].isAlive = ture;
+                        <BoxComponent
+                            key={`${i}-${j}`}
+                            isAlive={true}
+                        />
+                    }
+                }
+                else {
+                    // 2. A living cell with less than two living neighbours dies.
+                    if (numOfLivingNeighbors < 2) {
+                        // boxComponents[i][j].isAlive = false;
+                        <BoxComponent
+                            key={`${i}-${j}`}
+                            isAlive={true}
+                        />
+                    } else if (numOfLivingNeighbors === 2 || numOfLivingNeighbors === 3) {
+                        continue;
+                    } else if (numOfLivingNeighbors > 3) {
+                        // boxComponents[i][j].isAlive = false;
+                        <BoxComponent
+                            key={`${i}-${j}`}
+                            isAlive={true}
+                        />
+                    }
+                    // 3. A living cell with two or three live neighbours lives.
+                    // 4. A living cell with more than three live neighbours dies.
                 }
 
-                if (i == 4 && j == 5) {
-                    boxComponents[i][j].isAlive = false;
-                }
             }
         }
     }
 
-    // console.log('hihihi-jiaxuanli');
-    // const chosenIndices = genRandomIndicesForAliveBoxes(rows, cols);
-    // const initial_count = chosenIndices.size;
+    // check the number of living neighbors cells and dead neighbor cells of a cell (i, j)
+    function countLivingAndDeadNeighbors(boxComponents, i, j) {
+        let numOfLivingNeighbors = 0; // 3 living neighbors 
+        // up
+        if (i - 1 >= 0) {
+            if (boxComponents[i - 1][j].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
 
-    // console.log('chosenIndices 111111: ', chosenIndices);
-    // console.log('initial_count 1111111: ', initial_count);
-    // let boxComponentsLatest = buildGrid(chosenIndices, rows, cols);
-    // setBoxComponents(boxComponentsLatest);
+        // down
+        if (i + 1 < boxComponents.length) {
+            if (boxComponents[i + 1][j].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
+
+        // left
+        if (j - 1 >= 0) {
+            if (boxComponents[i][j - 1].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
+        // right
+        if (j + 1 < boxComponents[i].length) {
+            if (boxComponents[i][j + 1].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
+        // left, up
+        if (i - 1 >= 0 && j - 1 >= 0) {
+            if (boxComponents[i - 1][j - 1].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
+        // left, down
+        if (i + 1 < boxComponents.length && j - 1 >= 0) {
+            if (boxComponents[i + 1][j - 1].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
+        // right, up
+        if (i - 1 >= 0 && j + 1 < boxComponents[i].length) {
+            if (boxComponents[i - 1][j + 1].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
+        // right, down
+        if (i + 1 < boxComponents.length && j + 1 < boxComponents[i].length) {
+            if (boxComponents[i + 1][j + 1].isAlive === true) {
+                numOfLivingNeighbors += 1;
+            }
+        }
+        return numOfLivingNeighbors;
+
+    }
+
     const boxComponents = buildGrid(chosenIndices, rows, cols);
 
     return (
         // <CountContext.Provider value={{ count, setCount }}>
-        // <CountProvider initialCount={initialCount}>
-        <CountContext.Provider value={{ count, setCount }}>
+        <CountContext.Provider value={{ good_count, setGoodCount }}>
             <div className='content'>
                 {/* <div className='part'> */}
                 <div className='form-container my-4'>
@@ -202,25 +283,17 @@ export default function GridLayout() {
                     <button onClick={resetGridSize} className="btn btn-primary">Submit</button>
                     {error && <div className="alert alert-danger mt-3">{error}</div>}
                 </div>
-                {/* </div> */}
-                {/* <div className='part2'> */}
-                {/* <div grid-count-heatmap-container> */}
-                <div>Current Living Cells: {count}</div>
+                <div>Current Living Cells: {good_count}</div>
                 <div className='grid-background'>
                     <div className="grid-container" ref={gridContainerRef}>
                         {boxComponents}
                     </div>
                 </div>
-                {/* </div> */}
-                {/* </div> */}
-                {/* <div className='part'> */}
                 <div className='form-container form-control-bottom'>
                     <button onClick={resetGrid} className="btn btn-primary">Reset</button>
-                    <button onClick={resetGrid} className="btn btn-primary">Run Simulation</button>
+                    <button onClick={runSimulation(boxComponents)} className="btn btn-primary">Run Simulation</button>
                 </div>
-                {/* </div> */}
             </div>
-            {/* </CountProvider> */}
         </CountContext.Provider>
     )
 }
