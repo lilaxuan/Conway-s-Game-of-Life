@@ -71,7 +71,7 @@ heroku/nodejs
 // check the logs
 heroku logs --tail -a shrouded-stream-58438
 
-git push heroku 
+git push heroku main
 
 // Move all files from Conways-Game-of-life-react-app to root directory
 cd 
@@ -81,3 +81,11 @@ cd ..
 
 // Check if app is running
 heroku ps -a shrouded-stream-58438
+
+
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
