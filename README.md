@@ -82,10 +82,3 @@ cd ..
 // Check if app is running
 heroku ps -a shrouded-stream-58438
 
-
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
-  },
