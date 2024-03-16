@@ -8,7 +8,9 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 
-# Conway-s-Game-of-Life
+# Conway-s-Game-of-Life:
+# App Link: https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/
+
 
 1. Initialize the React App:
 
@@ -48,7 +50,7 @@ On MacOS:
 `cd ~/myapp`
 `heroku create`
  ›   Warning: heroku update available from 7.60.2 to 8.10.0.
-Creating app... done, ⬢ shrouded-stream-58438
+Creating app... done, ⬢ shrouded-stream-58438 (application name)
 https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/ | https://git.heroku.com/shrouded-stream-58438.git
 
 
@@ -75,3 +77,7 @@ git push heroku
 cd 
 mv * .[^.]* ..
 cd ..
+
+
+// Check if app is running
+heroku ps -a shrouded-stream-58438
