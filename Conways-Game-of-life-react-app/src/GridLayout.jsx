@@ -134,6 +134,7 @@ export default function GridLayout() {
     // }
 
     function runSimulation() {
+        console.log('hihi run simulation:');
         const newGrid = grid.map((row, i) =>
             row.map((cell, j) => {
                 const alive = countLivingNeighbors(grid, i, j);
@@ -142,7 +143,10 @@ export default function GridLayout() {
                 return cell;
             })
         );
+        console.log('hihi run simulation: newGrid: ', newGrid);
         setGrid(newGrid);
+        console.log('hihi run simulation: boxComponents: ', buildGrid(newGrid, rows, cols));
+        setBoxComponents(buildGrid(newGrid, rows, cols));
     }
 
 
@@ -169,12 +173,12 @@ export default function GridLayout() {
         }
         // left
         if (j - 1 >= 0) {
-            if (grid[i][j - 1].isAlive === true) {
+            if (grid[i][j - 1] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // right
-        if (j + 1 < grid[i].length) {
+        if (j + 1 < grid[0].length) {
             if (grid[i][j + 1] === true) {
                 numOfLivingNeighbors += 1;
             }
@@ -192,7 +196,7 @@ export default function GridLayout() {
             }
         }
         // right, up
-        if (i - 1 >= 0 && j + 1 < grid[i].length) {
+        if (i - 1 >= 0 && j + 1 < grid[0].length) {
             if (grid[i - 1][j + 1] === true) {
                 numOfLivingNeighbors += 1;
             }
