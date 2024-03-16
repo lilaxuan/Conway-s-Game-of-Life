@@ -47,8 +47,29 @@ On MacOS:
 `heroku login` or `heroku login -i`
 `cd ~/myapp`
 `heroku create`
+ ›   Warning: heroku update available from 7.60.2 to 8.10.0.
+Creating app... done, ⬢ shrouded-stream-58438
+https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/ | https://git.heroku.com/shrouded-stream-58438.git
 
 
+heroku git:remote -a shrouded-stream-58438
+
+// check the remote repo
+git remote -v
+heroku  https://git.heroku.com/shrouded-stream-58438.git (fetch)
+heroku  https://git.heroku.com/shrouded-stream-58438.git (push)
+origin  https://github.com/lilaxuan/Conway-s-Game-of-Life.git (fetch)
+origin  https://github.com/lilaxuan/Conway-s-Game-of-Life.git (push)
+
+// Check the buildpacks
+heroku buildpacks
+=== shrouded-stream-58438 Buildpack URL
+heroku/nodejs
+
+// check the logs
+heroku logs --tail -a shrouded-stream-58438
+
+git push heroku 
 
 // Move all files from Conways-Game-of-life-react-app to root directory
 cd 
