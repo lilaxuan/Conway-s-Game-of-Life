@@ -33,11 +33,13 @@ export default function GridLayout() {
     // console.log('hihihihihihihihi1111111111');
     const [grid, setGrid] = useState(() => initialGridState(rows, cols));
     const [count, setCount] = useState(0);
+    const [boxComponents, setBoxComponents] = useState(buildGrid(grid, rows, cols));
 
 
     useEffect(() => {
         const count = countLivingCells(grid);
         setCount(count);
+        setBoxComponents(buildGrid(grid, rows, cols));
     }, [grid, rows, cols]);
 
     function countLivingCells(grid) {
@@ -61,6 +63,8 @@ export default function GridLayout() {
         setError('');
         setRows(inputRows);
         setCols(inputCols);
+        const newGrid = initialGridState(inputRows, inputCols);
+        setGrid(newGrid);
         // console.log('hihihi');
         // const boxComponents = buildGrid();
         // console.log('hihihi2');
@@ -203,7 +207,7 @@ export default function GridLayout() {
     }
 
     // const boxComponents = buildGrid(chosenIndices, rows, cols);
-    const boxComponents = buildGrid(grid, rows, cols);
+    // const boxComponents = buildGrid(grid, rows, cols);
 
 
 
