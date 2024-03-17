@@ -5,20 +5,52 @@ import './GridLayout.css';
 import { useCount } from './CountProvider';
 
 
+// const initialGridState = (rows, cols) => {
+//     const grid = [];
+//     for (let i = 0; i < rows; i++) {
+//         const row = [];
+//         for (let j = 0; j < cols; j++) {
+//             // needs to increase the chance of a cell to be alive, otherwise the simulation cannot be continued most likely
+//             if (Math.random() < 0.2) {
+//                 row.push(true);
+//             } else {
+//                 row.push(false);
+//             }
+//         }
+//         grid.push(row);
+//     }
+//     return grid;
+// };
+
 const initialGridState = (rows, cols) => {
-    const grid = [];
-    for (let i = 0; i < rows; i++) {
-        const row = [];
-        for (let j = 0; j < cols; j++) {
-            // needs to increase the chance of a cell to be alive, otherwise the simulation cannot be continued most likely
-            if (Math.random() < 0.2) {
-                row.push(true);
-            } else {
-                row.push(false);
+    const grid = Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
+
+    // Calculate total cells and determine the number of initially alive cells
+    const totalCells = rows * cols;
+    const initialAliveCells = Math.floor(totalCells * 0.05); // 5% of the grid
+
+    for (let a = 0; a < initialAliveCells; a++) {
+        // Select a random cell to be alive
+        let i = Math.floor(Math.random() * rows);
+        let j = Math.floor(Math.random() * cols);
+        grid[i][j] = true;
+
+        // Cluster around this cell
+        // Determine the number of neighbors to also turn alive
+        const neighborsToAlive = Math.floor(Math.random() * 4) + 1; // 1 to 4 neighbors
+        for (let n = 0; n < neighborsToAlive; n++) {
+            const iOffset = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+            const jOffset = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+            const newI = i + iOffset;
+            const newJ = j + jOffset;
+
+            // Check bounds and avoid the cell itself
+            if (newI >= 0 && newI < rows && newJ >= 0 && newJ < cols && !(iOffset === 0 && jOffset === 0)) {
+                grid[newI][newJ] = true;
             }
         }
-        grid.push(row);
     }
+
     return grid;
 };
 
