@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import BoxComponent from './BoxComponent';
 import './GridLayout.css';
-import { CountContext } from './CountProvider';
+// import { CountContext } from './CountProvider';
+import { useCount } from './CountProvider';
 
 
 const initialGridState = (rows, cols) => {
@@ -31,9 +32,9 @@ export default function GridLayout() {
     const [inputCols, setInputCols] = useState(INITIAL_COLS);
     const [error, setError] = useState('');
     const gridContainerRef = useRef(null); // Ref for accessing the grid container to change the rows and cols for the grid
-    // console.log('hihihihihihihihi1111111111');
     const [grid, setGrid] = useState(() => initialGridState(rows, cols));
-    const [count, setCount] = useState(0);
+    // const [count, setCount] = useState(0);
+    const { count, setCount } = useCount();
     const [boxComponents, setBoxComponents] = useState(buildGrid(grid, rows, cols));
 
 
@@ -66,19 +67,6 @@ export default function GridLayout() {
         setCols(inputCols);
         const newGrid = initialGridState(inputRows, inputCols);
         setGrid(newGrid);
-        // console.log('hihihi');
-        // const boxComponents = buildGrid();
-        // console.log('hihihi2');
-        // console.log(boxComponents);
-        // console.log(boxComponents[1]);
-        // console.log(boxComponents[1][2]);
-        // boxComponents[1][2]
-        // for (let i = 0; i < boxComponents.length; i++) {
-        //     for (let j = 0; j < boxComponents[0].length; j++) {
-        //         console.log(hihihi)
-        //         console.log(boxComponents[i][j]);
-        //     }
-        // }
     };
 
     // useEffect better not nested in another function 
@@ -146,14 +134,19 @@ export default function GridLayout() {
             })
         );
         console.log('hihi run simulation: newGrid: ', newGrid);
+        console.log("hihi run simulation: previous count: ", count)
         setGrid(newGrid);
-        setCount(countLivingCells(newGrid));
+        console.log("hihi run simulation: current count?: ", count)
+        // setCount(countLivingCells(newGrid));
         console.log("hihi run simulation: new_count: ", countLivingCells(newGrid));
-        console.log("hihi run simulation: new_count - :", count); // not actually updating the count even used setCount. 
-        setBoxComponents(buildGrid(newGrid, rows, cols)); // even if the boxComponent has been changed, but if the key didn't change, the DOM will not be re-rendered!!!!!!
-        console.log('hihi run simulation: new boxComponents: ', buildGrid(newGrid, rows, cols));
+        console.log("hihi run simulation: new_count ?:", count); // not actually updating the count even used setCount. 因为setCount是异步更新的，立马更新完可能看不到change。可以有useEffect()
+        // setBoxComponents(buildGrid(newGrid, rows, cols)); // even if the boxComponent has been changed, but if the key didn't change, the DOM will not be re-rendered!!!!!!
+        // console.log('hihi run simulation: new boxComponents: ', buildGrid(newGrid, rows, cols));
     }
 
+    useEffect(() => {
+        console.log("hihi run simulation: count changed to current value", count); // Check the updated count here
+    }, [count]);
 
     // check the number of living neighbors cells and dead neighbor cells of a cell (i, j)
     function countLivingNeighbors(grid, i, j) {
@@ -221,38 +214,38 @@ export default function GridLayout() {
 
 
     return (
-        <CountContext.Provider value={{ count, setCount }}>
-            <div className='content'>
-                <div className='form-container my-4'>
-                    <p>Reset the grid width and height</p>
-                    <input
-                        type="text"
-                        className="form-control mb-3"
-                        placeholder="Width"
-                        onChange={(e) => setInputCols(parseInt(e.target.value) || 0)}
-                        value={inputCols} />
-                    <input
-                        type="text"
-                        className="form-control mb-3"
-                        placeholder="Height"
-                        onChange={(e) => setInputRows(parseInt(e.target.value) || 0)}
-                        value={inputRows} />
+        <div className='content'>
+            <div className='form-container my-4'>
+                <p>Reset the grid width and height</p>
+                <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Width"
+                    onChange={(e) => setInputCols(parseInt(e.target.value) || 0)}
+                    value={inputCols} />
+                <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Height"
+                    onChange={(e) => setInputRows(parseInt(e.target.value) || 0)}
+                    value={inputRows} />
 
-                    <button id='grid-button' onClick={resetGridSize} className="btn btn-primary">Submit</button>
-                    {error && <div className="alert alert-danger mt-3">{error}</div>}
-                </div>
-                <div>Current Living Cells: {countLivingCells(grid)}</div>
-                <div className='grid-background'>
-                    <div className="grid-container" ref={gridContainerRef}>
-                        {buildGrid(grid, rows, cols)}
-                    </div>
-                </div>
-                <div className='form-container form-control-bottom'>
-                    <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
-                    <button id='grid-button' onClick={() => runSimulation()} className="btn btn-primary">Run Simulation</button>
+                <button id='grid-button' onClick={resetGridSize} className="btn btn-primary">Submit</button>
+                {error && <div className="alert alert-danger mt-3">{error}</div>}
+            </div>
+            <div>Current Living Cells: {count}</div>
+            {/* this works for click */}
+            {/* <div>Current Living Cells: {countLivingCells(grid)}</div>  this works for run simulation*/}
+            <div className='grid-background'>
+                <div className="grid-container" ref={gridContainerRef}>
+                    {buildGrid(grid, rows, cols)}
                 </div>
             </div>
-        </CountContext.Provider>
+            <div className='form-container form-control-bottom'>
+                <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
+                <button id='grid-button' onClick={() => runSimulation()} className="btn btn-primary">Run Simulation</button>
+            </div>
+        </div>
     )
 }
 
