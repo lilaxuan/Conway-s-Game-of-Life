@@ -24,8 +24,8 @@ const initialGridState = (rows, cols) => {
 
 
 export default function GridLayout() {
-    const INITIAL_ROWS = 7;
-    const INITIAL_COLS = 7;
+    const INITIAL_ROWS = 20;
+    const INITIAL_COLS = 20;
     const [rows, setRows] = useState(INITIAL_ROWS);
     const [cols, setCols] = useState(INITIAL_COLS);
     const [inputRows, setInputRows] = useState(INITIAL_ROWS); // save the input values
@@ -102,6 +102,10 @@ export default function GridLayout() {
         // just need to updates the rows and cols. So when those data has been changed, the page will be re-rendered again. So the boxComponents will be re-rendered. 
         setRows(INITIAL_ROWS);
         setCols(INITIAL_COLS);
+        setInputRows(INITIAL_ROWS);
+        setInputCols(INITIAL_COLS);
+        setGrid(initialGridState(rows, cols));
+
     }
 
     // function runSimulation(grid) {
