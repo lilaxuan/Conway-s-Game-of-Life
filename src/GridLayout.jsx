@@ -24,8 +24,8 @@ const initialGridState = (rows, cols) => {
 
 
 export default function GridLayout() {
-    const INITIAL_ROWS = 6;
-    const INITIAL_COLS = 6;
+    const INITIAL_ROWS = 7;
+    const INITIAL_COLS = 7;
     const [rows, setRows] = useState(INITIAL_ROWS);
     const [cols, setCols] = useState(INITIAL_COLS);
     const [inputRows, setInputRows] = useState(INITIAL_ROWS); // save the input values
@@ -36,12 +36,12 @@ export default function GridLayout() {
     // const [count, setCount] = useState(0);
     const { count, setCount } = useCount();
     const [boxComponents, setBoxComponents] = useState(buildGrid(grid, rows, cols));
+    const [autoPlay, setAutoPlay] = useState(false);
 
 
     useEffect(() => {
         const count = countLivingCells(grid);
         setCount(count);
-        setBoxComponents(buildGrid(grid, rows, cols));
     }, [grid, rows, cols]);
 
     function countLivingCells(grid) {
@@ -122,6 +122,43 @@ export default function GridLayout() {
     //     setGrid(grid);
     // }
 
+    function autoPlayGame() {
+        setAutoPlay(!autoPlay);
+    }
+
+    // useEffect(() => {
+    //     if (autoPlay === true) {
+    //         console.log('start');
+    //         while (autoPlay === true) {
+    //             runSimulation();
+    //         }
+    //     }
+    //     console.log('stoppp!!!');
+
+    // }, [autoPlay]);
+
+    useEffect(() => {
+        let intervalId;
+
+        if (autoPlay === true) {
+            console.log('start');
+            intervalId = setInterval(runSimulation, 1000); // Run `runSimulation` every 100ms (1 second)
+        } else {
+            console.log('stoppp!!!');
+            if (intervalId) {
+                clearInterval(intervalId); // Clear interval if autoPlay is false
+            }
+        }
+
+        // Cleanup function to clear interval when the component unmounts or autoPlay changes
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+    }, [autoPlay, grid]); // Dependency array includes autoPlay and grid to re-trigger effect when it changes.
+
+
     function runSimulation() {
         console.log('hihi run simulation: grid: ', grid);
         console.log('hihi run simulation: boxComponent: ', boxComponents);
@@ -144,9 +181,10 @@ export default function GridLayout() {
         // console.log('hihi run simulation: new boxComponents: ', buildGrid(newGrid, rows, cols));
     }
 
-    useEffect(() => {
-        console.log("hihi run simulation: count changed to current value", count); // Check the updated count here
-    }, [count]);
+    // useEffect(() => {
+    //     console.log("hihi run simulation: count changed to current value", count); // Check the updated count here
+    // }, [count]);
+
 
     // check the number of living neighbors cells and dead neighbor cells of a cell (i, j)
     function countLivingNeighbors(grid, i, j) {
@@ -243,7 +281,8 @@ export default function GridLayout() {
             </div>
             <div className='form-container form-control-bottom'>
                 <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
-                <button id='grid-button' onClick={() => runSimulation()} className="btn btn-primary">Run Simulation</button>
+                <button id='grid-button' onClick={runSimulation} className="btn btn-primary">Next Frame</button>
+                <button id='grid-button' onClick={autoPlayGame} className="btn btn-primary">AutoPlay</button>
             </div>
         </div>
     )
