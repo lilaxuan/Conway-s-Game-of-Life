@@ -21,6 +21,18 @@
 button {
     background: none;
     border: none;
+    border: 1px solid gray;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+}
+
+
+.box-button {
+    /* background: none; */
+    /* border: none; */
+    border: 1px solid gray;
     color: inherit;
     font: inherit;
     padding: 0;

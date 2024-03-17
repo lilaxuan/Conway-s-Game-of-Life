@@ -25,7 +25,7 @@ export default function BoxComponent(props) {
             setBoxColorClass('deadWhiteColor');
             setCount(count - 1);
         }
-    }, [props.isAlive]);
+    }, [boxLiving]);
 
     return (
         <div>

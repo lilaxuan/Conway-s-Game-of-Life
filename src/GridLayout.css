@@ -113,6 +113,20 @@ html {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
+#grid-button {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+
+}
+
+#grid-button:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+
+}
+
 .btn-primary {
     color: #fff;
     background-color: #007bff;

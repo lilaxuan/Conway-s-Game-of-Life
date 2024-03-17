@@ -233,7 +233,7 @@ export default function GridLayout() {
                         onChange={(e) => setInputRows(parseInt(e.target.value) || 0)}
                         value={inputRows} />
 
-                    <button onClick={resetGridSize} className="btn btn-primary">Submit</button>
+                    <button id='grid-button' onClick={resetGridSize} className="btn btn-primary">Submit</button>
                     {error && <div className="alert alert-danger mt-3">{error}</div>}
                 </div>
                 <div>Current Living Cells: {count}</div>
@@ -243,8 +243,8 @@ export default function GridLayout() {
                     </div>
                 </div>
                 <div className='form-container form-control-bottom'>
-                    <button onClick={resetGrid} className="btn btn-primary">Reset</button>
-                    <button onClick={() => runSimulation()} className="btn btn-primary">Run Simulation</button>
+                    <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
+                    <button id='grid-button' onClick={() => runSimulation()} className="btn btn-primary">Run Simulation</button>
                 </div>
             </div>
         </CountContext.Provider>
