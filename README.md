@@ -9,7 +9,10 @@ Currently, two official plugins are available:
 
 
 # Conway-s-Game-of-Life:
-# App Link: https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/
+# App Link: https://conway-s-game-of-life-mcm4.onrender.com
+
+https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/
+
 
 
 1. Initialize the React App:
