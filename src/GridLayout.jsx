@@ -10,7 +10,7 @@ const initialGridState = (rows, cols) => {
         const row = [];
         for (let j = 0; j < cols; j++) {
             // needs to increase the chance of a cell to be alive, otherwise the simulation cannot be continued most likely
-            if (Math.random() < 0.1) {
+            if (Math.random() < 0.2) {
                 row.push(true);
             } else {
                 row.push(false);
@@ -23,8 +23,8 @@ const initialGridState = (rows, cols) => {
 
 
 export default function GridLayout() {
-    const INITIAL_ROWS = 20;
-    const INITIAL_COLS = 20;
+    const INITIAL_ROWS = 6;
+    const INITIAL_COLS = 6;
     const [rows, setRows] = useState(INITIAL_ROWS);
     const [cols, setCols] = useState(INITIAL_COLS);
     const [inputRows, setInputRows] = useState(INITIAL_ROWS); // save the input values
@@ -147,6 +147,9 @@ export default function GridLayout() {
         );
         console.log('hihi run simulation: newGrid: ', newGrid);
         setGrid(newGrid);
+        setCount(countLivingCells(newGrid));
+        console.log("hihi run simulation: new_count: ", countLivingCells(newGrid));
+        console.log("hihi run simulation: new_count - :", count); // not actually updating the count even used setCount. 
         setBoxComponents(buildGrid(newGrid, rows, cols)); // even if the boxComponent has been changed, but if the key didn't change, the DOM will not be re-rendered!!!!!!
         console.log('hihi run simulation: new boxComponents: ', buildGrid(newGrid, rows, cols));
     }
@@ -238,7 +241,7 @@ export default function GridLayout() {
                     <button id='grid-button' onClick={resetGridSize} className="btn btn-primary">Submit</button>
                     {error && <div className="alert alert-danger mt-3">{error}</div>}
                 </div>
-                <div>Current Living Cells: {count}</div>
+                <div>Current Living Cells: {countLivingCells(grid)}</div>
                 <div className='grid-background'>
                     <div className="grid-container" ref={gridContainerRef}>
                         {buildGrid(grid, rows, cols)}
