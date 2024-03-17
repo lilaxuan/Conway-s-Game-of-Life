@@ -9,7 +9,8 @@ const initialGridState = (rows, cols) => {
     for (let i = 0; i < rows; i++) {
         const row = [];
         for (let j = 0; j < cols; j++) {
-            if (Math.random() < 0.05) {
+            // needs to increase the chance of a cell to be alive, otherwise the simulation cannot be continued most likely
+            if (Math.random() < 0.1) {
                 row.push(true);
             } else {
                 row.push(false);
@@ -96,9 +97,9 @@ export default function GridLayout() {
             let row = [];
             for (let j = 0; j < cols; j++) {
                 if (grid[i][j] === true) {
-                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={true} x={i} y={j} />);
+                    row.push(<BoxComponent key={`${i}-${j}-${grid[i][j]}`} isAlive={true} x={i} y={j} />);
                 } else {
-                    row.push(<BoxComponent key={`${i}-${j}`} isAlive={false} x={i} y={j} />);
+                    row.push(<BoxComponent key={`${i}-${j}-${grid[i][j]}`} isAlive={false} x={i} y={j} />);
                 }
             }
             newBoxComponents.push(row);
@@ -134,7 +135,8 @@ export default function GridLayout() {
     // }
 
     function runSimulation() {
-        console.log('hihi run simulation:');
+        console.log('hihi run simulation: grid: ', grid);
+        console.log('hihi run simulation: boxComponent: ', boxComponents);
         const newGrid = grid.map((row, i) =>
             row.map((cell, j) => {
                 const alive = countLivingNeighbors(grid, i, j);
@@ -145,8 +147,8 @@ export default function GridLayout() {
         );
         console.log('hihi run simulation: newGrid: ', newGrid);
         setGrid(newGrid);
-        console.log('hihi run simulation: boxComponents: ', buildGrid(newGrid, rows, cols));
-        setBoxComponents(buildGrid(newGrid, rows, cols));
+        setBoxComponents(buildGrid(newGrid, rows, cols)); // even if the boxComponent has been changed, but if the key didn't change, the DOM will not be re-rendered!!!!!!
+        console.log('hihi run simulation: new boxComponents: ', buildGrid(newGrid, rows, cols));
     }
 
 
@@ -239,7 +241,7 @@ export default function GridLayout() {
                 <div>Current Living Cells: {count}</div>
                 <div className='grid-background'>
                     <div className="grid-container" ref={gridContainerRef}>
-                        {boxComponents}
+                        {buildGrid(grid, rows, cols)}
                     </div>
                 </div>
                 <div className='form-container form-control-bottom'>
