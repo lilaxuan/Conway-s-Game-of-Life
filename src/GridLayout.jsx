@@ -105,7 +105,7 @@ export default function GridLayout() {
         setInputRows(INITIAL_ROWS);
         setInputCols(INITIAL_COLS);
         setGrid(initialGridState(rows, cols));
-
+        setAutoPlay(false); // turn off autoPlay if the grid has been re-set.
     }
 
     // function runSimulation(grid) {
