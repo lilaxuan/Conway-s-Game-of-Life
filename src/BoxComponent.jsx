@@ -22,19 +22,33 @@ export default function BoxComponent(props) {
 
 
     function swithBoxState() {
+        let colorClass;
         if (boxLiving === true) {
             setBoxLiving(!boxLiving);
-            setBoxColorClass('deadWhiteColor');
-            setColorClass('deadWhiteColor')
+            // setBoxColorClass('deadWhiteColor');
+            // setColorClass('deadWhiteColor')
             setCount(count - 1);
             setAge(age + 1);
+            if (renderHeatmap === true) {
+                colorClass = getColorClassForAge(props.age);
+            } else {
+                colorClass -= 'deadWhiteColor'
+                setBoxColorClass('deadWhiteColor');
+            }
         } else {
             setBoxLiving(!boxLiving);
             setCount(count + 1);
-            setBoxColorClass('livingBlackColor');
-            setColorClass('livingBlackColor')
+            // setBoxColorClass('livingBlackColor');
+            // setColorClass('livingBlackColor')
             setAge(0); // back  to living cell
+            if (renderHeatmap === true) {
+                colorClass = getColorClassForAge(props.age);
+            } else {
+                colorClass -= 'livingBlackColor'
+                setBoxColorClass('livingBlackColor');
+            }
         }
+        setColorClass(colorClass);
 
     }
 
@@ -107,7 +121,7 @@ export default function BoxComponent(props) {
         } else {
             setColorClass(boxColorClass);
         }
-    }, [renderHeatmap]);
+    }, [renderHeatmap, age]);
 
 
     return (

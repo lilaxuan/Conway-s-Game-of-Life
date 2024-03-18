@@ -385,10 +385,29 @@ export default function GridLayout() {
 
 
     return (
-        <div className='content-container'>
+        <div>
+            <div className='form-container my-4'>
+                <p>Reset the grid width and height</p>
+                <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Width"
+                    onChange={(e) => setInputCols(parseInt(e.target.value) || 0)}
+                    value={inputCols} />
+                <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Height"
+                    onChange={(e) => setInputRows(parseInt(e.target.value) || 0)}
+                    value={inputRows} />
 
-            <div className='content'>
-                <div className='form-container my-4'>
+                <button id='grid-button' onClick={resetGridSize} className="btn btn-primary">Submit</button>
+                {error && <div className="alert alert-danger mt-3 red">{error}</div>}
+            </div>
+
+            <div className='content-container'>
+                <div className='content-left'>
+                    {/* <div className='form-container my-4'>
                     <p>Reset the grid width and height</p>
                     <input
                         type="text"
@@ -405,29 +424,44 @@ export default function GridLayout() {
 
                     <button id='grid-button' onClick={resetGridSize} className="btn btn-primary">Submit</button>
                     {error && <div className="alert alert-danger mt-3 red">{error}</div>}
-                </div>
-                <div>Current Living Cells: {count}</div>
-                {/* this works for click */}
-                {/* <div>Current Living Cells: {countLivingCells(grid)}</div>  this works for run simulation*/}
+                </div> */}
+                    <div>Current Living Cells: {count}</div>
+                    {/* this works for click */}
+                    {/* <div>Current Living Cells: {countLivingCells(grid)}</div>  this works for run simulation*/}
 
-                <div className='grid-background'>
-                    <div className="grid-container" ref={gridContainerRef}>
-                        {buildGrid(grid, rows, cols)}
+                    <div className='grid-background'>
+                        <div className="grid-container" ref={gridContainerRef}>
+                            {buildGrid(grid, rows, cols)}
+                        </div>
                     </div>
-                </div>
-                <div className='form-container form-control-bottom'>
+
+                    {/* <div className='form-container-bottom form-control-bottom'>
+                        <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
+                        <button id='grid-button' onClick={runSimulation} className="btn btn-primary">Next Frame</button>
+                        <button id='grid-button' onClick={autoPlayGame} className="btn btn-primary">AutoPlay</button>
+                    </div> */}
+
+
+                    {/* <div className='grid-buttons-container'>
                     <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
                     <button id='grid-button' onClick={runSimulation} className="btn btn-primary">Next Frame</button>
                     <button id='grid-button' onClick={autoPlayGame} className="btn btn-primary">AutoPlay</button>
+                    <button id='grid-button' onClick={replaceColorWithHeatMap} className="btn btn-primary">Replace With A HeatMap</button>
+                </div> */}
                 </div>
+
+                <div className='content-right'>
+                    {/* <div className='grid-buttons-container'> */}
+                    <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
+                    <button id='grid-button' onClick={runSimulation} className="btn btn-primary">Next Frame</button>
+                    <button id='grid-button' onClick={autoPlayGame} className="btn btn-primary">AutoPlay</button>
+                    <button id='grid-button' onClick={replaceColorWithHeatMap} className="btn btn-primary">Replace With A HeatMap</button>
+                    {/* </div> */}
+                </div>
+
+                {/* <div className='content-side'>Current Living Cells: {count}</div> */}
+
             </div>
-
-            <div className='content-side'>
-                <button id='grid-button' onClick={replaceColorWithHeatMap} className="btn btn-primary">Replace With A HeatMap</button>
-            </div>
-
-            {/* <div className='content-side'>Current Living Cells: {count}</div> */}
-
         </div>
     )
 }
