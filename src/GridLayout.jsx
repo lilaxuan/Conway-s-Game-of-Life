@@ -143,8 +143,17 @@ export default function GridLayout() {
         if (gridContainerRef.current) {
             gridContainerRef.current.style.setProperty('--rows', rows);
             gridContainerRef.current.style.setProperty('--cols', cols);
+
+            // dynamically set the box size
+            const maxGridHeight = 600; // Adjust as needed
+            const maxBoxHeight = Math.floor(maxGridHeight / rows);
+            const boxSize = Math.max(Math.min(maxBoxHeight, 20), 5); // Clamp size between 5px and 20px
+            gridContainerRef.current.style.setProperty('--box-height', `${boxSize}px`);
+            gridContainerRef.current.style.setProperty('--box-width', `${boxSize}px`);
         }
     }, [rows, cols]);
+
+
 
 
     function buildGrid(grid, rows, cols) {

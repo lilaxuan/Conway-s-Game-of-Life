@@ -1,6 +1,14 @@
-.box {
+/* .box {
     width: 20px;
     height: 100%;
+    border: 1px solid gray;
+    transition: background-color 0.3s;
+} */
+
+.box {
+    /* the var in the CSS is a gloabl state */
+    width: var(--box-width);
+    height: var(--box-height);
     border: 1px solid gray;
     transition: background-color 0.3s;
 }
