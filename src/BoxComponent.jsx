@@ -62,6 +62,23 @@ export default function BoxComponent(props) {
         }
     }, [boxLiving]); // add dependencies as needed
 
+
+    function getColorForAge(age) {
+        const maxAge = 10;
+        const aliveColor = { r: 0, g: 255, b: 0 }; // Green
+        const deadColor = { r: 255, g: 0, b: 0 }; // Red
+      
+        const clampAge = Math.min(age, maxAge);
+        const blend = clampAge / maxAge;
+      
+        const r = Math.round(deadColor.r * blend + aliveColor.r * (1 - blend));
+        const g = Math.round(deadColor.g * blend + aliveColor.g * (1 - blend));
+        const b = Math.round(deadColor.b * blend + aliveColor.b * (1 - blend));
+      
+        return `rgb(${r},${g},${b})`;
+      }
+      
+
     return (
         <div>
             <button className={`box ${boxColorClass}`} onClick={swithBoxState}></button>

@@ -1,9 +1,9 @@
 import './Home.css'
 import { Link, Routes, Route } from 'react-router-dom';
-import Personal from './Personal';
-import GridLayout from './GridLayout';
+import Personal from '../Personal';
+import GridLayout from '../GridLayout';
 import HomePageContent from './HomePageContent';
-import { CountProvider } from './CountProvider';
+import { CountProvider } from '../CountProvider';
 
 export default function Home() {
 
