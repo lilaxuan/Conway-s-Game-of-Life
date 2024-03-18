@@ -22,8 +22,43 @@ import { useCount } from './CountProvider';
 //     return grid;
 // };
 
+// const initialGridState = (rows, cols) => {
+//     const grid = Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
+
+//     // Calculate total cells and determine the number of initially alive cells
+//     const totalCells = rows * cols;
+//     const initialAliveCells = Math.floor(totalCells * 0.05); // 5% of the grid
+
+//     for (let a = 0; a < initialAliveCells; a++) {
+//         // Select a random cell to be alive
+//         let i = Math.floor(Math.random() * rows);
+//         let j = Math.floor(Math.random() * cols);
+//         grid[i][j] = true;
+
+//         // Cluster around this cell
+//         // Determine the number of neighbors to also turn alive
+//         const neighborsToAlive = Math.floor(Math.random() * 4) + 1; // 1 to 4 neighbors
+//         for (let n = 0; n < neighborsToAlive; n++) {
+//             const iOffset = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+//             const jOffset = Math.floor(Math.random() * 3) - 1; // -1, 0, or 1
+//             const newI = i + iOffset;
+//             const newJ = j + jOffset;
+
+//             // Check bounds and avoid the cell itself
+//             if (newI >= 0 && newI < rows && newJ >= 0 && newJ < cols && !(iOffset === 0 && jOffset === 0)) {
+//                 grid[newI][newJ] = true;
+//             }
+//         }
+//     }
+
+//     return grid;
+// };
+
 const initialGridState = (rows, cols) => {
-    const grid = Array.from({ length: rows }, () => Array.from({ length: cols }, () => false));
+    // Initialize the grid with objects containing alive status and age
+    const grid = Array.from({ length: rows }, () =>
+        Array.from({ length: cols }, () => ({ alive: false, age: 1 }))
+    );
 
     // Calculate total cells and determine the number of initially alive cells
     const totalCells = rows * cols;
@@ -33,7 +68,7 @@ const initialGridState = (rows, cols) => {
         // Select a random cell to be alive
         let i = Math.floor(Math.random() * rows);
         let j = Math.floor(Math.random() * cols);
-        grid[i][j] = true;
+        grid[i][j] = { alive: true, age: 0 }; // Set alive and reset age to 0
 
         // Cluster around this cell
         // Determine the number of neighbors to also turn alive
@@ -46,13 +81,13 @@ const initialGridState = (rows, cols) => {
 
             // Check bounds and avoid the cell itself
             if (newI >= 0 && newI < rows && newJ >= 0 && newJ < cols && !(iOffset === 0 && jOffset === 0)) {
-                grid[newI][newJ] = true;
+                grid[newI][newJ] = { alive: true, age: 0 }; // Set neighboring cells alive and reset age to 0
             }
         }
     }
-
     return grid;
 };
+
 
 
 export default function GridLayout() {
@@ -67,8 +102,9 @@ export default function GridLayout() {
     const [grid, setGrid] = useState(() => initialGridState(rows, cols));
     // const [count, setCount] = useState(0);
     const { count, setCount } = useCount();
-    const [boxComponents, setBoxComponents] = useState(buildGrid(grid, rows, cols));
     const [autoPlay, setAutoPlay] = useState(false);
+    const [renderWithHeatmap, setRenderWithHeatmap] = useState(false);
+    const [boxComponents, setBoxComponents] = useState(buildGrid(grid, rows, cols));
 
 
     useEffect(() => {
@@ -80,7 +116,7 @@ export default function GridLayout() {
         let livingCellsCount = 0;
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] === true) {
+                if (grid[i][j]['alive'] === true) {
                     livingCellsCount += 1;
                 }
             }
@@ -112,18 +148,23 @@ export default function GridLayout() {
 
 
     function buildGrid(grid, rows, cols) {
+        console.log('in buildGrid: ');
+        console.log('in buildGrid-renderWithHeatMap: ', renderWithHeatmap);
         let newBoxComponents = [];
         for (let i = 0; i < rows; i++) {
             let row = [];
             for (let j = 0; j < cols; j++) {
-                if (grid[i][j] === true) {
-                    row.push(<BoxComponent key={`${i}-${j}-${grid[i][j]}`} isAlive={true} x={i} y={j} />);
+                const age = grid[i][j]['age'];
+                if (grid[i][j]['alive'] === true) {
+                    // Key has to be unique so that the BoxComponent can be re-rendered
+                    row.push(<BoxComponent key={`${i}-${j}-${grid[i][j]['alive']}-${age}-${renderWithHeatmap}`} isAlive={true} age={age} renderHeatmap={renderWithHeatmap} />);
                 } else {
-                    row.push(<BoxComponent key={`${i}-${j}-${grid[i][j]}`} isAlive={false} x={i} y={j} />);
+                    row.push(<BoxComponent key={`${i}-${j}-${grid[i][j]['alive']}-${age}-${renderWithHeatmap}`} isAlive={false} age={age} renderHeatmap={renderWithHeatmap} />);
                 }
             }
             newBoxComponents.push(row);
         }
+        console.log('in buildGrid-new boxComponents: ', newBoxComponents);
         return newBoxComponents;
     };
 
@@ -136,8 +177,12 @@ export default function GridLayout() {
         setCols(INITIAL_COLS);
         setInputRows(INITIAL_ROWS);
         setInputCols(INITIAL_COLS);
-        setGrid(initialGridState(rows, cols));
+        const newGrid = initialGridState(INITIAL_ROWS, INITIAL_COLS);
+        setGrid(newGrid);
+
+        // setBoxComponents(buildGrid(newGrid, INITIAL_ROWS, INITIAL_COLS))
         setAutoPlay(false); // turn off autoPlay if the grid has been re-set.
+        // setRenderWithHeatmap(false);
     }
 
     // function runSimulation(grid) {
@@ -195,31 +240,70 @@ export default function GridLayout() {
     }, [autoPlay, grid]); // Dependency array includes autoPlay and grid to re-trigger effect when it changes.
 
     function replaceColorWithHeatMap() {
-
+        setRenderWithHeatmap(!renderWithHeatmap);
     }
 
+    useEffect(() => {
+        if (renderWithHeatmap === true) {
+            buildGrid(grid, rows, cols);
+        }
+    }, [renderWithHeatmap]);
+
+
+    // function runSimulation() {
+    //     // console.log('hihi run simulation: grid: ', grid);
+    //     // console.log('hihi run simulation: boxComponent: ', boxComponents);
+    //     const newGrid = grid.map((row, i) =>
+    //         row.map((cell, j) => {
+    //             const alive = countLivingNeighbors(grid, i, j);
+    //             if (cell && (alive < 2 || alive > 3)) return false;
+    //             if (!cell && alive === 3) return true;
+    //             return cell;
+    //         })
+    //     );
+    //     // console.log('hihi run simulation: newGrid: ', newGrid);
+    //     // console.log("hihi run simulation: previous count: ", count)
+    //     setGrid(newGrid);
+    //     // console.log("hihi run simulation: current count?: ", count)
+    //     // console.log("hihi run simulation: new_count: ", countLivingCells(newGrid));
+    //     // console.log("hihi run simulation: new_count ?:", count); // not actually updating the count even used setCount. 因为setCount是异步更新的，立马更新完可能看不到change。可以有useEffect()
+    //     // setBoxComponents(buildGrid(newGrid, rows, cols)); // even if the boxComponent has been changed, but if the key didn't change, the DOM will not be re-rendered!!!!!!
+    // }
 
     function runSimulation() {
-        console.log('hihi run simulation: grid: ', grid);
-        console.log('hihi run simulation: boxComponent: ', boxComponents);
         const newGrid = grid.map((row, i) =>
             row.map((cell, j) => {
-                const alive = countLivingNeighbors(grid, i, j);
-                if (cell && (alive < 2 || alive > 3)) return false;
-                if (!cell && alive === 3) return true;
-                return cell;
+                const neighborsAlive = countLivingNeighbors(grid, i, j);
+                let newCell = { ...cell }; // Create a copy of the cell object
+
+                // Cell's next state logic
+                if (cell.alive) {
+                    if (neighborsAlive < 2 || neighborsAlive > 3) {
+                        // A living cell dies due to underpopulation or overpopulation
+                        newCell.alive = false;
+                        newCell.age = 1; // Alive has been changed from true to false; set age to 1
+                    } else {
+                        // A living cell stays alive
+                        newCell.age = 0; // Age is reset to 0 if the cell stays alive
+                    }
+                } else {
+                    if (neighborsAlive === 3) {
+                        // A dead cell becomes alive due to reproduction
+                        newCell.alive = true;
+                        newCell.age = 0; // Alive has been changed from false to true; reset age to 0
+                    } else {
+                        // A dead cell stays dead
+                        newCell.age += 1; // Increase the age by 1 if the cell remains dead
+                    }
+                }
+
+                return newCell;
             })
         );
-        console.log('hihi run simulation: newGrid: ', newGrid);
-        console.log("hihi run simulation: previous count: ", count)
-        setGrid(newGrid);
-        console.log("hihi run simulation: current count?: ", count)
-        // setCount(countLivingCells(newGrid));
-        console.log("hihi run simulation: new_count: ", countLivingCells(newGrid));
-        console.log("hihi run simulation: new_count ?:", count); // not actually updating the count even used setCount. 因为setCount是异步更新的，立马更新完可能看不到change。可以有useEffect()
-        // setBoxComponents(buildGrid(newGrid, rows, cols)); // even if the boxComponent has been changed, but if the key didn't change, the DOM will not be re-rendered!!!!!!
-        // console.log('hihi run simulation: new boxComponents: ', buildGrid(newGrid, rows, cols));
+
+        setGrid(newGrid); // Update the grid with the new state
     }
+
 
     // useEffect(() => {
     //     console.log("hihi run simulation: count changed to current value", count); // Check the updated count here
@@ -237,49 +321,49 @@ export default function GridLayout() {
         }
         // up
         if (i - 1 >= 0) {
-            if (grid[i - 1][j] === true) {
+            if (grid[i - 1][j]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // down
         if (i + 1 < grid.length) {
-            if (grid[i + 1][j] === true) {
+            if (grid[i + 1][j]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // left
         if (j - 1 >= 0) {
-            if (grid[i][j - 1] === true) {
+            if (grid[i][j - 1]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // right
         if (j + 1 < grid[0].length) {
-            if (grid[i][j + 1] === true) {
+            if (grid[i][j + 1]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // left, up
         if (i - 1 >= 0 && j - 1 >= 0) {
-            if (grid[i - 1][j - 1] === true) {
+            if (grid[i - 1][j - 1]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // left, down
         if (i + 1 < grid.length && j - 1 >= 0) {
-            if (grid[i + 1][j - 1] === true) {
+            if (grid[i + 1][j - 1]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // right, up
         if (i - 1 >= 0 && j + 1 < grid[0].length) {
-            if (grid[i - 1][j + 1] === true) {
+            if (grid[i - 1][j + 1]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
         // right, down
         if (i + 1 < grid.length && j + 1 < grid[i].length) {
-            if (grid[i + 1][j + 1] === true) {
+            if (grid[i + 1][j + 1]['alive'] === true) {
                 numOfLivingNeighbors += 1;
             }
         }
