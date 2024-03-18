@@ -8,6 +8,11 @@ html {
     flex-direction: column;
 }
 
+.content-container {
+    display: flex;
+    flex-direction: row;
+}
+
 .content {
     flex-grow: 1;
     /* Takes up remaining space */
@@ -21,25 +26,18 @@ html {
     margin-top: 0.01vh;
 }
 
-.part {
-    /* flex-grow: 1; */
+.content-side {
     display: flex;
-    flex-direction: column;
-    flex: 1;
-    /* Make parts take equal space in the .content container */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px;
 }
 
-.part2 {
-    /* flex-grow: 1; */
+.grid-color-area {
     display: flex;
-    flex-direction: column;
-    flex: 2;
-    /* Make parts take equal space in the .content container */
-    flex-wrap: wrap;
-    /* Allows boxes to wrap to the next line/column */
+    flex-direction: row;
 }
-
-
 
 .grid-background {
     background-color: #e0e0e0;
@@ -72,11 +70,11 @@ html {
     margin-top: 10px;
 }
 
-.form-container p {
+/* .form-container p {
     font-size: 1rem;
     margin-bottom: 0.2rem;
     color: #333;
-}
+} */
 
 .form-control {
     display: block;
@@ -90,6 +88,10 @@ html {
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.red {
+    color: red;
 }
 
 .form-control-bottom {
@@ -138,9 +140,3 @@ html {
     background-color: #0069d9;
     border-color: #0062cc;
 }
-
-/* .grid-count-heatmap-container {
-    display: block;
-    justify-content: center;
-    align-items: center;
-} */
