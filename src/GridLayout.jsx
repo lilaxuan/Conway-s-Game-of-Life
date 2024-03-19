@@ -186,6 +186,7 @@ export default function GridLayout() {
         setCols(INITIAL_COLS);
         setInputRows(INITIAL_ROWS);
         setInputCols(INITIAL_COLS);
+        setError('');
         const newGrid = initialGridState(INITIAL_ROWS, INITIAL_COLS);
         setGrid(newGrid);
 
