@@ -297,14 +297,20 @@ export default function GridLayout() {
                             {buildGrid(grid, rows, cols)}
                         </div>
                     </div>
+
                 </div>
 
                 <div className='content-right'>
-                    <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
-                    <button id='grid-button' onClick={runSimulation} className="btn btn-primary">Next Frame</button>
+                    {/* <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
+                    <button id='grid-button' onClick={runSimulation} className="btn btn-primary">Next Frame</button> */}
                     <button id='grid-button' onClick={autoPlayGame} className="btn btn-primary">AutoPlay</button>
                     <button id='grid-button' onClick={replaceColorWithHeatMap} className="btn btn-primary">Replace With A HeatMap</button>
                 </div>
+            </div>
+
+            <div className='form-container-bottom'>
+                <button id='grid-button' onClick={resetGrid} className="btn btn-primary">Reset</button>
+                <button id='grid-button' onClick={runSimulation} className="btn btn-primary">Next Frame</button>
             </div>
         </div>
     )

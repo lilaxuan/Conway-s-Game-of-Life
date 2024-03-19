@@ -21,6 +21,7 @@ html {
     align-items: center;
     padding-top: 0.01vh;
     margin-top: 0.01vh;
+    margin-bottom: 10px;
 }
 
 .content-right {
@@ -34,6 +35,7 @@ html {
     align-items: center;
     gap: 20px;
 }
+
 
 .grid-color-area {
     display: flex;
@@ -82,8 +84,8 @@ html {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    gap: 5px;
-    margin-top: 10px;
+    gap: 150px;
+    padding: 5px;
     margin-bottom: 10px;
 }
 

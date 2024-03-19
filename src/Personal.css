@@ -1,0 +1,14 @@
+.content-container-personal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 200px;
+    margin-bottom: 10px;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+}

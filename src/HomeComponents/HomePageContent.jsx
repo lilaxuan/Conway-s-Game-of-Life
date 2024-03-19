@@ -1,9 +1,11 @@
+import './HomePageContent.css';
+
 export default function HomePageContent() {
     return (
-        <div className="container">
+        <div className="content-container-home">
             <div className="game-introduction p-4 bg-light border rounded-3">
                 <h2 className="fw-bold">Conway’s Game of Life</h2>
-                <p>The Game of Life is a cellular automaton devised by the British mathematician John Horton Conway in 1970. The game is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves.</p>
+                <p><a href='https://playgameoflife.com/'>The Game of Life</a> is a cellular automaton devised by the British mathematician John Horton Conway in 1970. The game is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input. One interacts with the Game of Life by creating an initial configuration and observing how it evolves.</p>
                 <h3 className="mt-3">Rules</h3>
                 <ul>
                     <li>Any live cell with fewer than two live neighbors dies, as if by underpopulation.</li>
