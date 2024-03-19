@@ -9,10 +9,14 @@ Currently, two official plugins are available:
 
 
 # Conway-s-Game-of-Life:
-# App Link: https://conway-s-game-of-life-mcm4.onrender.com
+App Link: https://conway-s-game-of-life-mcm4.onrender.com
 
 https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/
 
+
+# Demo of the App
+https://northeastern.zoom.us/rec/share/X0eNQLTol2qjl0LUYX9U6yVlrh_QkzdLLP7SGYhBU8_Znx18RPjGvYiY7Zosq4eH.8KjsiKISFsanQBob?startTime=1710810087000
+Passcode: 5G%VNA6K
 
 
 1. Initialize the React App:
