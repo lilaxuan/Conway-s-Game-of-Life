@@ -38,8 +38,6 @@ button {
 
 
 .box-button {
-    /* background: none; */
-    /* border: none; */
     border: 1px solid gray;
     color: inherit;
     font: inherit;
@@ -47,63 +45,7 @@ button {
     cursor: pointer;
 }
 
-/* Alive color at age 0 */
-.cell-age-0 {
-    background: linear-gradient(0deg, rgba(0, 255, 0, 1) 0%, rgba(0, 255, 0, 1) 100%);
-}
 
-/* Example gradients for ages 1 to 9 */
-.cell-age-1 {
-    background: linear-gradient(0deg, rgba(0, 255, 0, 1) 90%, rgba(225, 0, 0, 1) 10%);
-}
-
-.cell-age-2 {
-    background: linear-gradient(0deg, rgba(0, 255, 0, 1) 80%, rgba(225, 0, 0, 1) 20%);
-}
-
-.cell-age-3 {
-    background: linear-gradient(0deg, rgba(0, 255, 0, 1) 70%, rgba(225, 0, 0, 1) 30%);
-}
-
-/* Continue for ages 4 through 8 */
-.cell-age-9 {
-    background: linear-gradient(0deg, rgba(0, 255, 0, 1) 10%, rgba(225, 0, 0, 1) 90%);
-}
-
-/* Dead color at age 10 or more */
-.cell-age-max {
-    background: linear-gradient(0deg, rgba(225, 0, 0, 1) 0%, rgba(225, 0, 0, 1) 100%);
-}
-
-/*
-.cell-age-0 {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%);
-}
-
-.cell-age-1 {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 90%, rgba(255, 255, 255, 1) 10%);
-}
-
-.cell-age-2 {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 80%, rgba(255, 255, 255, 1) 20%);
-}
-
-.cell-age-3 {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 70%, rgba(255, 255, 255, 1) 30%);
-}
-
-.cell-age-9 {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 10%, rgba(255, 255, 255, 1) 90%);
-}
-
-.cell-age-max {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
-}
-
-*/
-
-
-/* styles.css */
 .age-0 {
     background-color: red;
 }
@@ -112,7 +54,6 @@ button {
     background-color: #fca103;
 }
 
-/* Example for a gradual transition */
 .age-2 {
     background-color: #fcd303;
 }
@@ -148,5 +89,3 @@ button {
 .age-10 {
     background-color: navy;
 }
-
-/* For age 10 and beyond */
