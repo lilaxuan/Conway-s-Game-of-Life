@@ -1,17 +1,5 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-
 # Conway-s-Game-of-Life:
 App Link: https://conway-s-game-of-life-mcm4.onrender.com
-
-https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/
 
 
 # Demo of the App
@@ -35,11 +23,11 @@ cd into the package directory
 
 `npm run dev`
 
-4. Add React Reouter to help to route accross different pages
+4. Add React Router to help to route across different pages
 `npm install react-router-dom`   (this will automatically add the dependency in the package.json)
 
 # Host React Application on Heroku
-## 1. build the React application
+## 1. Build the React application
 `npm run build`
 
 ## 2. Install express
@@ -47,45 +35,5 @@ cd into the package directory
 
 ## 3. create a server.js
 
-## 4. Prepare Your Heroku Environment
-### 4.1 Install the Heroku CLI: 
-On MacOS: 
-
-`brew tap heroku/brew && brew install heroku`
-`heroku --version`
-`heroku login` or `heroku login -i`
-`cd ~/myapp`
-`heroku create`
- ›   Warning: heroku update available from 7.60.2 to 8.10.0.
-Creating app... done, ⬢ shrouded-stream-58438 (application name)
-https://shrouded-stream-58438-f6b78aa7cb2d.herokuapp.com/ | https://git.heroku.com/shrouded-stream-58438.git
-
-
-heroku git:remote -a shrouded-stream-58438
-
-// check the remote repo
-git remote -v
-heroku  https://git.heroku.com/shrouded-stream-58438.git (fetch)
-heroku  https://git.heroku.com/shrouded-stream-58438.git (push)
-origin  https://github.com/lilaxuan/Conway-s-Game-of-Life.git (fetch)
-origin  https://github.com/lilaxuan/Conway-s-Game-of-Life.git (push)
-
-// Check the buildpacks
-heroku buildpacks
-=== shrouded-stream-58438 Buildpack URL
-heroku/nodejs
-
-// check the logs
-heroku logs --tail -a shrouded-stream-58438
-
-git push heroku main
-
-// Move all files from Conways-Game-of-life-react-app to root directory
-cd 
-mv * .[^.]* ..
-cd ..
-
-
-// Check if app is running
-heroku ps -a shrouded-stream-58438
+## 4. Deploy the App on Render
 
