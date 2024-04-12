@@ -2,12 +2,13 @@
 App Link: https://conway-s-game-of-life-mcm4.onrender.com
 
 
-# Demo of the App
+## Demo of the App
 https://northeastern.zoom.us/rec/share/X0eNQLTol2qjl0LUYX9U6yVlrh_QkzdLLP7SGYhBU8_Znx18RPjGvYiY7Zosq4eH.8KjsiKISFsanQBob?startTime=1710810087000
+
 Passcode: 5G%VNA6K
 
 
-1. Initialize the React App:
+## 1. Initialize the React App:
 
 `npm create vite@latest`
 
@@ -26,14 +27,9 @@ cd into the package directory
 4. Add React Router to help to route across different pages
 `npm install react-router-dom`   (this will automatically add the dependency in the package.json)
 
-# Host React Application on Heroku
-## 1. Build the React application
+## 2. Build the React application
 `npm run build`
 
-## 2. Install express
-`npm install express`
 
-## 3. create a server.js
-
-## 4. Deploy the App on Render
+## 3. Deploy the App on Render
 
